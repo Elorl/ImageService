@@ -12,6 +12,7 @@ namespace ImageService
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// trygit
         static void Main(string[] args)
         {
             ServiceBase[] ServicesToRun = new ServiceBase[] { new ImageService(args) };
