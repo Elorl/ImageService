@@ -5,9 +5,16 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
+using ImageService.Server;
+using ImageService.Controller;
+using ImageService.Modal;
+using ImageService.Logging;
+using ImageService.Logging.Modal;
+using System.Configuration;
+using 
 
 
 namespace ImageService
@@ -42,6 +49,10 @@ namespace ImageService
         private int eventId = 1;
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
+        private ImageServer m_imageServer;          // The Image Server
+        private IImageServiceModal modal;
+        private IImageController controller;
+        private ILoggingService logging;
 
         public ImageService(string[] args)
         {
