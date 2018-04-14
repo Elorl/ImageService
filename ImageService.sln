@@ -3,26 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService", "ImageService\ImageService.csproj", "{90C19320-DACE-4CC6-AED8-B96E6C112B52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService", "ImageService\ImageService.csproj", "{3BA2801C-D344-4983-B2B4-DF19E762C372}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CC800194-90A0-44F7-A693-D41E91AB6732}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageService", "ImageService", "{6B56774D-6290-4B6B-A914-783699855738}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "enums", "enums", "{68E48DC0-5EDE-4A8D-B42A-1C9152C5935E}"
-	ProjectSection(SolutionItems) = preProject
-		Infrastructure\Enums\CommandEnum.cs = Infrastructure\Enums\CommandEnum.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{E52AB2B0-6C62-475F-98F6-DBC16EF3F5A2}"
-	ProjectSection(SolutionItems) = preProject
-		Logging\ILoggingService.cs = Logging\ILoggingService.cs
-		Logging\LoggingService.cs = Logging\LoggingService.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modal", "Modal", "{441B49C7-19E6-4D41-830B-7725E0BCA2E6}"
-	ProjectSection(SolutionItems) = preProject
-		Logging\Modal\MessageRecievedEventArgs.cs = Logging\Modal\MessageRecievedEventArgs.cs
-		Logging\Modal\MessageTypeEnum.cs = Logging\Modal\MessageTypeEnum.cs
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageService", "ImageService", "{1AC773BC-89AA-4B38-A3EC-D9AFEACCE8C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,16 +15,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{90C19320-DACE-4CC6-AED8-B96E6C112B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90C19320-DACE-4CC6-AED8-B96E6C112B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90C19320-DACE-4CC6-AED8-B96E6C112B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90C19320-DACE-4CC6-AED8-B96E6C112B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BA2801C-D344-4983-B2B4-DF19E762C372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BA2801C-D344-4983-B2B4-DF19E762C372}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BA2801C-D344-4983-B2B4-DF19E762C372}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BA2801C-D344-4983-B2B4-DF19E762C372}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{68E48DC0-5EDE-4A8D-B42A-1C9152C5935E} = {CC800194-90A0-44F7-A693-D41E91AB6732}
-		{441B49C7-19E6-4D41-830B-7725E0BCA2E6} = {E52AB2B0-6C62-475F-98F6-DBC16EF3F5A2}
+		{3BA2801C-D344-4983-B2B4-DF19E762C372} = {1AC773BC-89AA-4B38-A3EC-D9AFEACCE8C2}
+		{1AC773BC-89AA-4B38-A3EC-D9AFEACCE8C2} = {6B56774D-6290-4B6B-A914-783699855738}
 	EndGlobalSection
 EndGlobal

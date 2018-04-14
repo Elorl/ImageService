@@ -11,10 +11,9 @@ using System.Threading.Tasks;
 using ImageService.Server;
 using ImageService.Controller;
 using ImageService.Modal;
-using ImageService.Logging;
 using ImageService.Logging.Modal;
 using System.Configuration;
-using 
+using ImageService.Infrastructure;
 
 
 namespace ImageService
@@ -52,7 +51,8 @@ namespace ImageService
         private ImageServer m_imageServer;          // The Image Server
         private IImageServiceModal modal;
         private IImageController controller;
-        private ILoggingService logging;
+        private Logging.ILoggingService logging;
+
 
         public ImageService(string[] args)
         {

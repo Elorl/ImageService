@@ -22,6 +22,20 @@ namespace ImageService.Server
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
         #endregion
 
-       
+       public ImageServer(ImageController controller, ILoggingService logging)
+        {
+            string[] folders;
+            this.m_controller = controller;
+            this.m_logging = logging;
+           
+
+            foreach(string folder in folders)
+            {
+                try
+                {
+                    IDirectoryHandler handler = new DirectoyHandler();
+                }
+            }
+        }
     }
 }
