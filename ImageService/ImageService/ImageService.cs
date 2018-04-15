@@ -127,8 +127,19 @@ namespace ImageService
             eventLog1.WriteEntry("In OnContinue.");
         }
 
-        private void ImageService_MessageRecieved(object sender, MessageRecievedEventArgs args) {
-            eventLog1.WriteEvent(args.Message);
+        private void MessageRecievedOperation(object sender, MessageRecievedEventArgs args)
+        {
+            // get message type
+            EventLogEntryType messageType;
+            switch (args.Status)
+            {
+                default: type = EventLogEntryType.Information; break;
+                case MessageTypeEnum.WARNING: type = EventLogEntryType.Warning; break;
+                case MessageTypeEnum.INFO: type = EventLogEntryType.Information; break;
+                case MessageTypeEnum.FAIL: type = EventLogEntryType.Error; break;
+
+            }
+            eventLog1.WriteEntry(args.Message, messageType);
         }
     }
 }
