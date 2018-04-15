@@ -83,7 +83,7 @@ namespace ImageService
             //register this messageRecived function to the MessageRecieved event in the logger
             this.looger.MessageRecieved += ImageService_MessageRecieved;
             
-            this.model = new ImageServiceModal();
+            this.model = new IImageServiceModal();
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
         }
@@ -112,7 +112,7 @@ namespace ImageService
         protected override void OnStop()
         {
             //DirectoryCloseEventArgs server and update log info
-            this.m_server.closeServer();
+            this.server.closeServer();
             eventLog1.WriteEntry("In onStop.");
         }
 
