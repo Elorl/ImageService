@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using ImageService.Server;
 using ImageService.Controller;
 using ImageService.Modal;
+using ImageService.Logging;
 using ImageService.Logging.Modal;
 using System.Configuration;
 using ImageService.Infrastructure;
@@ -48,17 +49,20 @@ namespace ImageService
         private int eventId = 1;
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
-        private ImageServer m_imageServer;          // The Image Server
-        private IImageServiceModal modal;
+        private IImageServiceModal model;
         private IImageController controller;
-        private Logging.ILoggingService logging;
+        private ImageServer m_imageServer;          // The Image Server
+        private Logging.ILoggingService logger;
 
 
         public ImageService(string[] args)
         {
             InitializeComponent();
-            string eventSourceName = "MySource";
-            string logName = "MyNewLog";
+            eventLog1 = new System.Diagnostics.EventLog();
+            //app config values
+            string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
+            string logName = ConfigurationManager.AppSettings.Get("LogName");
+            int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings.Get("ThumbnailSize"));
             if (args.Count() > 0)
             {
                 eventSourceName = args[0];
@@ -67,13 +71,21 @@ namespace ImageService
             {
                 logName = args[1];
             }
-            eventLog1 = new System.Diagnostics.EventLog();
+            
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
                 System.Diagnostics.EventLog.CreateEventSource(eventSourceName, logName);
             }
             eventLog1.Source = eventSourceName;
             eventLog1.Log = logName;
+    
+            this.logger = new LoggingService();
+            //register this messageRecived function to the MessageRecieved event in the logger
+            this.looger.MessageRecieved += ImageService_MessageRecieved;
+            
+            this.model = new IImageServiceModal();
+            this.controller = new ImageController(this.model);
+            this.m_imageServer = new ImageServer(this.controller, this.logger);
         }
 
         protected override void OnStart(string[] args)
@@ -83,12 +95,14 @@ namespace ImageService
             serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            
             // Set up a timer to trigger every minute.  
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 60000; // 60 seconds  
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
             eventLog1.WriteEntry("In OnStart");
+            
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
@@ -97,6 +111,8 @@ namespace ImageService
 
         protected override void OnStop()
         {
+            //DirectoryCloseEventArgs server and update log info
+            this.server.closeServer();
             eventLog1.WriteEntry("In onStop.");
         }
 
@@ -109,6 +125,10 @@ namespace ImageService
         protected override void OnContinue()
         {
             eventLog1.WriteEntry("In OnContinue.");
+        }
+
+        private void ImageService_MessageRecieved(object sender, MessageRecievedEventArgs args) {
+            eventLog1.WriteEvent(args.Message);
         }
     }
 }
