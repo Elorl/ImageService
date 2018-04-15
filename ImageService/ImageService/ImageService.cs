@@ -81,9 +81,9 @@ namespace ImageService
     
             this.logger = new LoggingService();
             //register this messageRecived function to the MessageRecieved event in the logger
-            this.looger.MessageRecieved += ImageService_MessageRecieved;
+            this.logger.MessageRecieved += MessageRecievedOperation;
             
-            this.model = new IImageServiceModal();
+            this.model = new ImageServiceModal();
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
         }
@@ -112,7 +112,7 @@ namespace ImageService
         protected override void OnStop()
         {
             //DirectoryCloseEventArgs server and update log info
-            this.server.closeServer();
+            //this.server.closeServer();
             eventLog1.WriteEntry("In onStop.");
         }
 
@@ -133,10 +133,14 @@ namespace ImageService
             EventLogEntryType messageType;
             switch (args.Status)
             {
-                default: messageType = EventLogEntryType.Information; break;
-                case MessageTypeEnum.WARNING: type = EventLogEntryType.Warning; break;
-                case MessageTypeEnum.INFO: type = EventLogEntryType.Information; break;
-                case MessageTypeEnum.FAIL: type = EventLogEntryType.Error; break;
+                case MessageTypeEnum.WARNING: 
+                    messageType = EventLogEntryType.Warning; break;
+                case MessageTypeEnum.INFO:
+                    messageType = EventLogEntryType.Information; break;
+                case MessageTypeEnum.FAIL:
+                    messageType = EventLogEntryType.Error; break;
+                default:
+                    messageType = EventLogEntryType.Information; break;
 
             }
             eventLog1.WriteEntry(args.Message, messageType);
