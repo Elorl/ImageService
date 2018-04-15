@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace ImageService.Server
 {
@@ -27,15 +28,26 @@ namespace ImageService.Server
             string[] folders;
             this.m_controller = controller;
             this.m_logging = logging;
-           
+            folders = ConfigurationManager.AppSettings["Handler"].Split(';');
 
             foreach(string folder in folders)
             {
                 try
                 {
-                    IDirectoryHandler handler = new DirectoyHandler();
+                    IDirectoryHandler handler = new DirectoyHandler(this.m_controller, this.m_logging, folder);
+                    createHandler(folder);
+                }catch(Exception exception)
+                {
+                    this.m_logging.Log("failed to listen to the folder: " + folder, Logging.Modal.MessageTypeEnum.FAIL);
                 }
             }
+        }
+        private void createHandler(string folder)
+        {
+            IDirectoryHandler handler = new DirectoyHandler(this.m_controller, this.m_logging, folder);
+            this.CommandRecieved += handler.OnCommandRecieved;
+            handler.StartHandleDirectory(folder);
+            this.m_logging.Log("start watch the directory: " + folder, Logging.Modal.MessageTypeEnum.INFO);
         }
     }
 }
