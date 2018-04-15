@@ -62,7 +62,6 @@ namespace ImageService
             //app config values
             string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
             string logName = ConfigurationManager.AppSettings.Get("LogName");
-            int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings.Get("ThumbnailSize"));
             if (args.Count() > 0)
             {
                 eventSourceName = args[0];
@@ -82,8 +81,12 @@ namespace ImageService
             this.logger = new LoggingService();
             //register this messageRecived function to the MessageRecieved event in the logger
             this.logger.MessageRecieved += MessageRecievedOperation;
-            
-            this.model = new ImageServiceModal();
+
+            this.model = new ImageServiceModal()
+            {
+                OutputFolder = ConfigurationManager.AppSettings.Get("OutputDir"),
+                ThumbnailSize = Int32.Parse(ConfigurationManager.AppSettings.Get("ThumbnailSize"))
+            };
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
         }
@@ -141,7 +144,6 @@ namespace ImageService
                     messageType = EventLogEntryType.Error; break;
                 default:
                     messageType = EventLogEntryType.Information; break;
-
             }
             eventLog1.WriteEntry(args.Message, messageType);
         }
