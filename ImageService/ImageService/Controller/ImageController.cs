@@ -20,12 +20,29 @@ namespace ImageService.Controller
             m_modal = modal;                    // Storing the Modal Of The System
             commands = new Dictionary<int, ICommand>()
             {
-				// For Now will contain NEW_FILE_COMMAND
+                {(int)CommandEnum.NewFileCommand, new NewFileCommand(this.m_modal) }
             };
+			// For Now will contain NEW_FILE_COMMAND
         }
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
-           // Write Code Here
+            ICommand command;
+            if(commands.TryGetValue(commandID, out command))
+            {
+                Task<Tuple<string, bool>> task = new Task<Tuple<string, bool>>(() => {
+                    bool result;
+                    string msg = command.Execute(args, out result);
+                    return Tuple.Create(msg, result); });
+                task.Start();
+                task.Wait();
+                resultSuccesful = task.Result.Item2;
+                return task.Result.Item1;
+            }
+            else
+            {
+                resultSuccesful = false;
+                return "this is not a legal command";
+            }
         }
     }
 }
