@@ -133,7 +133,7 @@ namespace ImageService
             EventLogEntryType messageType;
             switch (args.Status)
             {
-                default: type = EventLogEntryType.Information; break;
+                default: messageType = EventLogEntryType.Information; break;
                 case MessageTypeEnum.WARNING: type = EventLogEntryType.Warning; break;
                 case MessageTypeEnum.INFO: type = EventLogEntryType.Information; break;
                 case MessageTypeEnum.FAIL: type = EventLogEntryType.Error; break;
