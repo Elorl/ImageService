@@ -20,7 +20,17 @@ namespace ImageService.Modal
         #endregion
         
         //properties
-
+        public string OutputFolder
+        {
+            get
+            {
+                return this.m_OutputFolder;
+            }
+            set
+            {
+                this.m_OutputFolder = value;
+            }
+        }
         public int ThumbnailSize
         {
             get
@@ -33,22 +43,9 @@ namespace ImageService.Modal
             }
         }
 
-        public string OutputFolder
-        {
-            get
-            {
-                return this.m_OutputFolder;
-            }
-            set
-            {
-                this.m_OutputFolder = value;
-            }
-        }
-
-
         public string AddFile(string path, out bool result)
         {
-            string year, month, thumbPath, newPath = String.Empty;
+            string year = String.Empty, month= String.Empty, newPath = String.Empty;
             DateTime createdTimeOfPath = new DateTime();
             //try to get the created time of the file.
             try
@@ -57,18 +54,22 @@ namespace ImageService.Modal
                 year = createdTimeOfPath.Year.ToString();
                 month = createdTimeOfPath.Month.ToString();
                 newPath = createDir(year, month);
+                //Thread.Sleep(500);
+                newPath = newPath + Path.GetFileName(path);
+                if(File.Exists(newPath))
+                {
+                    string newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + "_copy" + Path.GetExtension(newPath);
+                    File.Move(newPath, newPathWithNum);
+                };
+                Thread.Sleep(10);
                 File.Move(path, newPath);
-                
-                //thumbnails folders
-                Directory.CreateDir(m_OutputFolder + "\\" + "Thumbnails");
-                string thumbPath = this.CreateFolders(m_OutputFolder + "\\" + "Thumbnails", year, month);
             } catch(Exception exeption)
             {
                 result = false;
                 throw exeption;
             }
             string returnMsg;
-            returnMsg = "File" + Path.GetFileName(path) + "moved to" + newPath;
+            returnMsg = " File " + Path.GetFileName(path) + " moved to " + newPath;
             result = true;
             return returnMsg;
         }
@@ -85,7 +86,7 @@ namespace ImageService.Modal
             {
                 throw exeption;
             }
-            return m_OutputFolder + "\\" + year + "\\" + month;
+            return m_OutputFolder + "\\" + year + "\\" + month + "\\";
         }
        
     }
