@@ -18,8 +18,8 @@ namespace ImageService.Modal
         private string m_OutputFolder;            // The Output Folder
         private int m_thumbnailSize;              // The Size Of The Thumbnail Size
         #endregion
-        
-        //properties
+
+        #region properties
         public string OutputFolder
         {
             get
@@ -42,7 +42,14 @@ namespace ImageService.Modal
                 this.m_thumbnailSize = value;
             }
         }
+        #endregion
 
+        /// <summary>
+        /// The Function Addes A file to the system
+        /// </summary>
+        /// <param name="path">The Path of the Image from the file</param>
+        /// <param name="result">Indication if the Addition Was Successful</param>
+        /// <returns>operation message</returns>
         public string AddFile(string path, out bool result)
         {
             string year = String.Empty, month= String.Empty, newPath = String.Empty, thumbPath = String.Empty;
@@ -57,8 +64,8 @@ namespace ImageService.Modal
                 //Thread.Sleep(500);
                 newPath = newPath + Path.GetFileName(path);
                 int i = 1;
-                string newPathWithNum = String.Empty;
-                while(File.Exists(newPath))
+                string newPathWithNum = newPath;
+                while (File.Exists(newPath))
                 {
                     newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
@@ -74,13 +81,13 @@ namespace ImageService.Modal
                 thumbPath = m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\";
 
                 // if thumbnail not existed, create it
-                if (!File.Exists(thumbPath + newPathWithNum))
+                if (!File.Exists(thumbPath + Path.GetFileName(path)))
                 {
-
-                    using (Image image = Image.FromFile(thumbPath + newPathWithNum))
-                    using (Image thumbnail = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero))
+                    
+                    Image image = Image.FromFile(newPathWithNum);
+                    Image thumbnail = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero);
                     {
-                        thumbnail.Save(thumbPath + newPathWithNum);
+                        thumbnail.Save(thumbPath + Path.GetFileName(path));
                     }
 
                 }
@@ -95,6 +102,12 @@ namespace ImageService.Modal
             return returnMsg;
         }
 
+        /// <summary>
+        /// creating directory by year and month
+        /// </summary>
+        /// <param name="year">year</param>
+        /// <param name="month">month</param>
+        /// <returns>path for dir</returns>
         public string createDir(string year, string month)
         {
             try
