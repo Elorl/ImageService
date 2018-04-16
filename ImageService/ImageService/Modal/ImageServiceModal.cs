@@ -57,9 +57,10 @@ namespace ImageService.Modal
                 //Thread.Sleep(500);
                 newPath = newPath + Path.GetFileName(path);
                 int i = 1;
+                string newPathWithNum = String.Empty;
                 while(File.Exists(newPath))
                 {
-                    string newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
+                    newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
 
                    
