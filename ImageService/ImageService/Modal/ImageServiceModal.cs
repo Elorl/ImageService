@@ -57,8 +57,8 @@ namespace ImageService.Modal
                 //Thread.Sleep(500);
                 newPath = newPath + Path.GetFileName(path);
                 int i = 1;
-                string newPathWithNum = String.Empty;
-                while(File.Exists(newPath))
+                string newPathWithNum = newPath;
+                while (File.Exists(newPath))
                 {
                     newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
@@ -77,13 +77,13 @@ namespace ImageService.Modal
                 thumbPath = m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\";
 
                 // if thumbnail not existed, create it
-                if (!File.Exists(thumbPath + newPathWithNum))
+                if (!File.Exists(thumbPath + Path.GetFileName(path)))
                 {
-
-                    using (Image image = Image.FromFile(thumbPath + newPathWithNum))
-                    using (Image thumbnail = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero))
+                    
+                    Image image = Image.FromFile(newPathWithNum);
+                    Image thumbnail = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero);
                     {
-                        thumbnail.Save(thumbPath + newPathWithNum);
+                        thumbnail.Save(thumbPath + Path.GetFileName(path));
                     }
 
                 }
