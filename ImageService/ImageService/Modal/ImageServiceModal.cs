@@ -45,7 +45,7 @@ namespace ImageService.Modal
 
         public string AddFile(string path, out bool result)
         {
-            string year = String.Empty, month= String.Empty, newPath = String.Empty;
+            string year = String.Empty, month= String.Empty, newPath = String.Empty, thumbPath = String.Empty;
             DateTime createdTimeOfPath = new DateTime();
             //try to get the created time of the file.
             try
@@ -60,9 +60,29 @@ namespace ImageService.Modal
                 {
                     string newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + "_copy" + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
+
+                    //thumbnails directories and thumbnail creation
+                    string fullFileName = Path.GetFileNameWithoutExtension(path) + Path.GetExtension(path); 
+                    Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails");
+                    Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" +"\\" + year + "\\" + month);
+                    thumbPath = m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\";
+
+                    // if thumbnail not existed, create it
+                    if (!File.Exists(thumbPath + fullFileName))
+                    {
+
+                        using (Image image = Image.FromFile(thumbPath + fullFileName))
+                        using (Image thumbnail = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero))
+                        {
+                            thumbnail.Save(thumbPath + fullFileName);
+                        }
+
+                    }
+                   
                 };
                 Thread.Sleep(10);
                 File.Move(path, newPath);
+
             } catch(Exception exeption)
             {
                 result = false;
