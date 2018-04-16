@@ -56,10 +56,12 @@ namespace ImageService.Modal
                 newPath = createDir(year, month);
                 //Thread.Sleep(500);
                 newPath = newPath + Path.GetFileName(path);
-                if(File.Exists(newPath))
+                int i = 1;
+                while(File.Exists(newPath))
                 {
-                    string newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + "_copy" + Path.GetExtension(newPath);
+                    string newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
+                    ++i;
                 };
                 Thread.Sleep(10);
                 File.Move(path, newPath);
