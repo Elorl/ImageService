@@ -115,8 +115,9 @@ namespace ImageService
         protected override void OnStop()
         {
             //DirectoryCloseEventArgs server and update log info
-            //this.server.closeServer();
             eventLog1.WriteEntry("In onStop.");
+            this.m_imageServer.CloseServer();
+            eventLog1.WriteEntry("everything stoped.");
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)

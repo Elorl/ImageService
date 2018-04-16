@@ -56,6 +56,7 @@ namespace ImageService.Server
         public void CloseServer()
         {
             // invoking commandRecieved event with a close command arg
+            this.m_logging.Log("CloseServer start", Logging.Modal.MessageTypeEnum.INFO);
             CommandRecievedEventArgs args = new CommandRecievedEventArgs( (int)CommandEnum.CloseCommand, null, null );
             this.CommandRecieved?.Invoke(this, args);
             this.m_logging.Log("server closed", Logging.Modal.MessageTypeEnum.INFO);
@@ -69,6 +70,7 @@ namespace ImageService.Server
             IDirectoryHandler toRemove = (IDirectoryHandler)source; 
             this.CommandRecieved -= toRemove.OnCommandRecieved;
             this.m_logging.Log(args.Message, Logging.Modal.MessageTypeEnum.INFO);
+            this.m_logging.Log("Handler closed", Logging.Modal.MessageTypeEnum.INFO);
         }
     }
 }
