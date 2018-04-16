@@ -50,7 +50,7 @@ namespace ImageService.Modal
             //try to get the created time of the file.
             try
             {
-                createdTimeOfPath = File.GetCreationTime(path);
+                createdTimeOfPath = File.GetCreationTimeUtc(path);
                 year = createdTimeOfPath.Year.ToString();
                 month = createdTimeOfPath.Month.ToString();
                 newPath = createDir(year, month);
