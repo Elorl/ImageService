@@ -20,6 +20,19 @@ namespace ImageService.Modal
         #endregion
         
         //properties
+
+        public int ThumbnailSize
+        {
+            get
+            {
+                return this.m_thumbnailSize;
+            }
+            set
+            {
+                this.m_thumbnailSize = value;
+            }
+        }
+
         public string OutputFolder
         {
             get
@@ -32,9 +45,10 @@ namespace ImageService.Modal
             }
         }
 
+
         public string AddFile(string path, out bool result)
         {
-            string year, month, newPath = String.Empty;
+            string year, month, thumbPath, newPath = String.Empty;
             DateTime createdTimeOfPath = new DateTime();
             //try to get the created time of the file.
             try
@@ -44,6 +58,10 @@ namespace ImageService.Modal
                 month = createdTimeOfPath.Month.ToString();
                 newPath = createDir(year, month);
                 File.Move(path, newPath);
+                
+                //thumbnails folders
+                Directory.CreateDir(m_OutputFolder + "\\" + "Thumbnails");
+                string thumbPath = this.CreateFolders(m_OutputFolder + "\\" + "Thumbnails", year, month);
             } catch(Exception exeption)
             {
                 result = false;

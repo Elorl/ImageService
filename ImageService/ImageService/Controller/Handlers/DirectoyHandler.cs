@@ -48,9 +48,27 @@ namespace ImageService.Controller.Handlers
                 this.OnCommandRecieved(this, commandREventArgs);
             }
         }
+
+        public void EndHandle()
+        {
+            //disable watcher
+            this.m_dirWatcher.EnableRaisingEvents = false;
+            //raising DirectoryClose event
+            DirectoryCloseEventArgs args = new DirectoryCloseEventArgs(this.m_path, "closing directory: " + this.m_path);
+            DirectoryClose?.Invoke(this, args);
+        }
+
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
             bool result;
+
+            // if a close command
+            if(e.CommandID == (int)CommandEnum.CloseCommand) {
+                
+                this.EndHandle();
+                return;
+            }
+
             string massage = this.m_controller.ExecuteCommand(e.CommandID, e.Args, out result);
             if (result)
             {
