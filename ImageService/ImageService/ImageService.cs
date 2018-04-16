@@ -62,22 +62,12 @@ namespace ImageService
             //app config values
             string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
             string logName = ConfigurationManager.AppSettings.Get("LogName");
-            if (args.Count() > 0)
-            {
-                eventSourceName = args[0];
-            }
-            if (args.Count() > 1)
-            {
-                logName = args[1];
-            }
-            
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
                 System.Diagnostics.EventLog.CreateEventSource(eventSourceName, logName);
             }
             eventLog1.Source = eventSourceName;
             eventLog1.Log = logName;
-    
             this.logger = new LoggingService();
             //register this messageRecived function to the MessageRecieved event in the logger
             this.logger.MessageRecieved += MessageRecievedOperation;
