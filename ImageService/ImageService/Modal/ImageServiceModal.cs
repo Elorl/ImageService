@@ -18,8 +18,8 @@ namespace ImageService.Modal
         private string m_OutputFolder;            // The Output Folder
         private int m_thumbnailSize;              // The Size Of The Thumbnail Size
         #endregion
-        
-        //properties
+
+        #region properties
         public string OutputFolder
         {
             get
@@ -42,7 +42,14 @@ namespace ImageService.Modal
                 this.m_thumbnailSize = value;
             }
         }
+        #endregion
 
+        /// <summary>
+        /// The Function Addes A file to the system
+        /// </summary>
+        /// <param name="path">The Path of the Image from the file</param>
+        /// <param name="result">Indication if the Addition Was Successful</param>
+        /// <returns>operation message</returns>
         public string AddFile(string path, out bool result)
         {
             string year = String.Empty, month= String.Empty, newPath = String.Empty, thumbPath = String.Empty;
@@ -98,6 +105,12 @@ namespace ImageService.Modal
             return returnMsg;
         }
 
+        /// <summary>
+        /// creating directory by year and month
+        /// </summary>
+        /// <param name="year">year</param>
+        /// <param name="month">month</param>
+        /// <returns>path for dir</returns>
         public string createDir(string year, string month)
         {
             try

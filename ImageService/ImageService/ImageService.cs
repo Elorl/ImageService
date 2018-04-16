@@ -80,7 +80,10 @@ namespace ImageService
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
         }
-
+        /// <summary>
+        /// beeing activated in service start
+        /// </summary>
+        /// <param name="args">arguments</param>
         protected override void OnStart(string[] args)
         {
             // Update the service state to Start Pending.  
@@ -101,7 +104,9 @@ namespace ImageService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
         }
-
+        /// <summary>
+        /// beeing activated in service stop
+        /// </summary>
         protected override void OnStop()
         {
             //DirectoryCloseEventArgs server and update log info
@@ -109,18 +114,29 @@ namespace ImageService
             this.m_imageServer.CloseServer();
             eventLog1.WriteEntry("everything stoped.");
         }
-
+        /// <summary>
+        /// activated when timer invokes
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="args">args of the invokation</param>
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
         {
             // TODO: Insert monitoring activities here.  
             eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
         }
 
+        /// <summary>
+        /// when continuing service
+        /// </summary>
         protected override void OnContinue()
         {
             eventLog1.WriteEntry("In OnContinue.");
         }
-
+        /// <summary>
+        /// ivoked by event and wties to system log. specifically here by logger's event of messaging
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="args">arguments</param>
         private void MessageRecievedOperation(object sender, MessageRecievedEventArgs args)
         {
             // get message type
