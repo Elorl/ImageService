@@ -70,13 +70,10 @@ namespace ImageService.Modal
                     newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
 
-                   
                 };
 
                 Thread.Sleep(10);
                 File.Move(path, newPath);
-
-
                 //thumbnails directories and thumbnail creation
 
                 Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails");
