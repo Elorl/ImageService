@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Gui
 {
     public class LogItem
-    {
+    { 
         public String Type { get; set; }
         public String Message { get; set; }
 
