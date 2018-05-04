@@ -103,9 +103,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="dd\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\infrastructure\Infrastructure.csproj">
       <Project>{e7a6f421-bbf1-4ef7-88a2-7227df531331}</Project>
