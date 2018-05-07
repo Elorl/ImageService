@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using Gui;
-using Infrastructure.Enums;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Data;
 using Infrastracture.Enums;
-using Gui.vm;
 
 namespace Gui.models
 {
-    public class LogModel
+    public class LogModel : INotifyPropertyChanged
     {
-
-        #region Properties
+        #region properties
         public ObservableCollection<LogItem> LogsCollection { get; }
+        #endregion
+
+        // can't find a usage for it right now. maybe further.. $$$$$$$$
+        #region events
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         public LogModel()
         {
-            //todo : add request from server to all the logs wtitten by now @#@#@#$#$%#$@#@#@#
             this.LogsCollection = new ObservableCollection<LogItem>();
-            this.LogsCollection.Add(new LogItem("INFO", "bla"));
 
+            //testing binding $$$$$$$$$
+            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "c is too #"));
+            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "Pleasse help me H'"));
+            this.LogsCollection.Add(new LogItem(MessageTypeEnum.FAIL, "some Log"));
+            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "I love Linux"));
+            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "some Dog"));
+            this.LogsCollection.Add(new LogItem(MessageTypeEnum.FAIL, "Microsoft is JIFFA"));
         }
     }
 }

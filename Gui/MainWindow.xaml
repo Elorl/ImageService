@@ -14,9 +14,7 @@
                 
             </TabItem>
             <TabItem Header="Log">
-                <views:Log 
-                 DataContext="{Binding Log}"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Loaded="Log_Loaded">
-                </views:Log>
+                <views:Log/>
             </TabItem>
         </TabControl>
 

@@ -1,30 +1,35 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gui.models;
 using System.ComponentModel;
-using Infrastracture.Enums;
+using System.Text;
+using Gui.models;
+
 namespace Gui.vm
 {
-    public class LogVm
+    public class LogVM :INotifyPropertyChanged
     {
- 
-
-        #region properties
-        public ObservableCollection<LogItem> LogsCollection { set; get; }
+        //may be removed later? $$$
+        #region events
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region members
-        private LogModel model;
+        private LogModel logModel;
         #endregion
 
-        public LogVm()
+        #region Properties
+        public ObservableCollection<LogItem> LogsCollection
         {
-            this.model = new LogModel();
-            this.LogsCollection = this.model.LogsCollection;
+            get { return this.logModel.LogsCollection; }
+            set => throw new NotImplementedException();
+        }
+        #endregion
+
+        public LogVM()
+        {
+            this.logModel = new LogModel();
         }
     }
 }

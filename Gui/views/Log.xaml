@@ -3,21 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Gui"
-             xmlns:vm="clr-namespace:Gui.vm"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-    <DataGrid  ItemsSource="{Binding LogsCollection}" AutoGenerateColumns="False" CanUserAddRows="False"
-        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+             xmlns:local="clr-namespace:Gui.vm"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             mc:Ignorable="d"
+             d:DesignHeight="260.901" d:DesignWidth="321">
+
+    <DockPanel ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Margin="-1,0,0,10">
+        <Label Content="Logs" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center"  Foreground="Blue" RenderTransformOrigin="2.634,0.921" DockPanel.Dock="Top"/>
+        <DataGrid ItemsSource="{Binding LogsCollection}" AutoGenerateColumns="False" CanUserAddRows="False"  VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Width="Auto" Height="Auto" Margin="0,0,0,10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Type" Width="1*" Binding="{Binding Path=Type}">
+                <DataGridTextColumn Header="Type" IsReadOnly="True" Width="Auto"  Binding="{Binding Path=Type}" >
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Message" Width="9*" Binding="{Binding Path=Message}">
-                    
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Message"  IsReadOnly="True" Width="*" Binding="{Binding Message}" />
             </DataGrid.Columns>
+
         </DataGrid>
-            </Grid>
+    </DockPanel>
 
 </UserControl>

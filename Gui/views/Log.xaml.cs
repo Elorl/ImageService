@@ -13,19 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Gui.vm;
+
 namespace Gui.views
 {
     /// <summary>
-    /// Interaction logic for Log.xaml
+    /// Interaction logic for LogUC.xaml
     /// </summary>
     public partial class Log : UserControl
     {
-        private LogVm vm;
         public Log()
         {
             InitializeComponent();
-            vm = new LogVm();
-            this.DataContext = vm; 
+            this.DataContext = new LogVM(); 
         }
     }
 }

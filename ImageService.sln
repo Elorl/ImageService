@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageService", "ImageServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "Gui\Gui.csproj", "{2CA2C4BD-62C6-4D8F-B00E-066AD0C1C09B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "infrastructure\Infrastructure.csproj", "{E7A6F421-BBF1-4EF7-88A2-7227DF531331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "infrastructure\Infrastructure.csproj", "{E7A6F421-BBF1-4EF7-88A2-7227DF531331}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
