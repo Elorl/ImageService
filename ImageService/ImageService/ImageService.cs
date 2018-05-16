@@ -153,6 +153,7 @@ namespace ImageService
                     messageType = EventLogEntryType.Information; break;
             }
             eventLog1.WriteEntry(args.Message, messageType);
+            
         }
     }
 }
