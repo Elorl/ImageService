@@ -69,21 +69,27 @@ namespace ImageService.Modal
                 {
                     newPathWithNum = newPath + Path.GetFileNameWithoutExtension(newPath) + i + Path.GetExtension(newPath);
                     File.Move(newPath, newPathWithNum);
+
                 };
+
                 Thread.Sleep(10);
                 File.Move(path, newPath);
                 //thumbnails directories and thumbnail creation
+
                 Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails");
                 Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month);
                 thumbPath = m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\";
+
                 // if thumbnail not existed, create it
                 if (!File.Exists(thumbPath + Path.GetFileName(path)))
                 {
+                    
                     Image image = Image.FromFile(newPathWithNum);
                     Image thumbnail = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero);
                     {
                         thumbnail.Save(thumbPath + Path.GetFileName(path));
                     }
+
                 }
             } catch(Exception exeption)
             {
@@ -106,12 +112,9 @@ namespace ImageService.Modal
         {
             try
             {
-                //create the basic directory.
                 DirectoryInfo outPutFold = Directory.CreateDirectory(m_OutputFolder);
                 outPutFold.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                //create the "year" directory.
                 Directory.CreateDirectory(m_OutputFolder + "\\" + year);
-                //create the "month" directory.
                 Directory.CreateDirectory(m_OutputFolder + "\\" + year + "\\" + month);
             } catch(Exception exeption)
             {
