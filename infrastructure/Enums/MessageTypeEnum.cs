@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastracture.Enums
+namespace infrastructure.Enums
 {
     public enum MessageTypeEnum : int
     {

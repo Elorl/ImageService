@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastracture.Events
+namespace infrastructure.Events
 {
     public class CommandRecievedEventArgs : EventArgs
     {
@@ -17,7 +17,6 @@ namespace Infrastracture.Events
             CommandID = id;
             Args = args;
             RequestDirPath = path;
-
         }
     }
 }

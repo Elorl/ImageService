@@ -14,8 +14,8 @@ using ImageService.Modal;
 using ImageService.Logging;
 using ImageService.Logging.Modal;
 using System.Configuration;
-using ImageService.Infrastructure;
-
+using infrastructure.Enums;
+using infrastructure;
 
 namespace ImageService
 {
@@ -53,11 +53,12 @@ namespace ImageService
         private IImageController controller;
         private ImageServer m_imageServer;          // The Image Server
         private Logging.ILoggingService logger;
-
+        private LogCollectionSingleton logCollectionSingleton; 
 
         public ImageService(string[] args)
         {
             InitializeComponent();
+            this.logCollectionSingleton = LogCollectionSingleton.Instance;
             eventLog1 = new System.Diagnostics.EventLog();
             //app config values
             string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
@@ -153,7 +154,7 @@ namespace ImageService
                     messageType = EventLogEntryType.Information; break;
             }
             eventLog1.WriteEntry(args.Message, messageType);
-            
+            logCollectionSingleton.LogsCollection.Add(new LogItem(args.Status, args.Message));
         }
     }
 }

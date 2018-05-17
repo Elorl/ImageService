@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel; 
+using System.Collections.ObjectModel;
+using infrastructure;
 
 namespace ImageService.Logging
 {
-    class LogCollectionSingelton
+    public class LogCollectionSingleton
     {
-        private static LogCollectionSingelton instance;
-        public ObservableCollection<Log> list { get; private set; }
+        private static LogCollectionSingleton instance;
+        public ObservableCollection<LogItem> LogsCollection { get; private set; }
 
-        private LogCollectionSingelton() { } 
+        private LogCollectionSingleton() { } 
 
-        public static LogCollectionSingelton Instance
+        public static LogCollectionSingleton Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new LogCollectionSingelton();
+                    instance = new LogCollectionSingleton();
                 }
                 return instance;
             }

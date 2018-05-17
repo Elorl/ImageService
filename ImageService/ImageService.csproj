@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ImageService</RootNamespace>
     <AssemblyName>ImageService</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,8 +66,6 @@
     <Compile Include="ImageService\ImageService.Designer.cs">
       <DependentUpon>ImageService.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageService\Modal\Event\CommandRecievedEventArgs.cs" />
-    <Compile Include="ImageService\Modal\Event\DirectoryCloseEventArgs.cs" />
     <Compile Include="ImageService\Modal\IImageServiceModal.cs" />
     <Compile Include="ImageService\Modal\ImageServiceModal.cs" />
     <Compile Include="ImageService\Program.cs" />
@@ -76,16 +75,15 @@
     <Compile Include="ImageService\ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\Enums\CommandEnum.cs" />
     <Compile Include="Logging\ILoggingService.cs" />
     <Compile Include="Logging\LogCollectionSingelton.cs" />
     <Compile Include="Logging\LoggingService.cs" />
     <Compile Include="Logging\Modal\MessageRecievedEventArgs.cs" />
-    <Compile Include="Logging\Modal\MessageTypeEnum.cs" />
     <Compile Include="ImageService\Properties\AssemblyInfo.cs" />
     <Compile Include="ImageService\Server\ImageServer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ImageService\App.config" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -98,9 +96,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\infrastructure\Infrastructure.csproj">
-      <Project>{e7a6f421-bbf1-4ef7-88a2-7227df531331}</Project>
-      <Name>Infrastructure</Name>
+    <ProjectReference Include="..\infrastructure\infrastructure.csproj">
+      <Project>{03fb0766-44bb-448f-bee3-87e31305f06b}</Project>
+      <Name>infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
