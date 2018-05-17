@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-namespace Gui.SettingsVM
+namespace Gui.settingsVM
 {
     interface ISettingsVM
     {

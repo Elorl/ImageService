@@ -7,19 +7,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Gui.models;
 
-namespace Gui.SettingsVM
+namespace Gui.settingsVM
 {
     class SettingsVM: ISettingsVM, INotifyPropertyChanged
     {
-        private string _OutputDir = String.Empty;
-        private string _SourceName = String.Empty;
-        private string _LogName = String.Empty;
-        private int _ThumbnailSize;
         private SettingsModel SettingsModel;
         #region events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
-
+        
         public SettingsVM()
         {
             this.SettingsModel = new SettingsModel();

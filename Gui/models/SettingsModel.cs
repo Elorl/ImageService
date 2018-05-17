@@ -11,7 +11,7 @@ namespace Gui.models
 {
     class SettingsModel : INotifyPropertyChanged
     {
-        private string _OutputDir = "out";
+        private string _OutputDir = String.Empty;
         private string _SourceName = String.Empty;
         private string _LogName = String.Empty;
         private int _ThumbnailSize;

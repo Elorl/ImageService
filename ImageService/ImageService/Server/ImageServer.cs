@@ -56,7 +56,7 @@ namespace ImageService.Server
                     createHandler(folder);
                 }catch(Exception exception)
                 {
-                    this.m_logging.Log("failed to listen to the folder: " + folder, MessageTypeEnum.FAIL);
+                    this.m_logging.Log("failed to listen to the folder: " + folder + exception, MessageTypeEnum.FAIL);
                 }
             }
         }

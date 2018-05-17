@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Gui.SettingsVM;
+using Gui.settingsVM;
 
 namespace Gui.views
 {
@@ -24,7 +24,7 @@ namespace Gui.views
         public Settings()
         {
             InitializeComponent();
-            this.DataContext = new SettingsVM.SettingsVM();
+            this.DataContext = new settingsVM.SettingsVM();
         }
     }
 }
