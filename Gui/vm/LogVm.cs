@@ -8,7 +8,7 @@ using Gui.models;
 using infrastructure;
 
 
-namespace Gui.vm
+namespace Gui.LogVM
 {
     public class LogVM :INotifyPropertyChanged
     {
