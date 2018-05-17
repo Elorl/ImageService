@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using Gui.models;
+using infrastructure;
+
 
 namespace Gui.LogVM
 {

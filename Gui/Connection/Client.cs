@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using Infrastracture.Events;
 using Newtonsoft.Json;
+using infrastructure.Events;
 
 namespace Gui.Connection
 {

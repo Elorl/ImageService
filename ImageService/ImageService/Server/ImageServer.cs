@@ -1,14 +1,19 @@
 ﻿using ImageService.Controller;
 using ImageService.Controller.Handlers;
-using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
-using ImageService.Modal;
 using System;
+using System.Net.Sockets;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using infrastructure.Events;
+using infrastructure.Enums;
+using System.Collections.Specialized;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace ImageService.Server
 {
@@ -17,6 +22,9 @@ namespace ImageService.Server
         #region Members
         private IImageController m_controller;
         private ILoggingService m_logging;
+        private LogCollectionSingleton LogCollectionSingleton;
+        private TcpListener tcpListener;
+        private List<TcpClient> clientsList;
         #endregion
 
         #region Properties
@@ -33,6 +41,10 @@ namespace ImageService.Server
             string[] folders;
             this.m_controller = controller;
             this.m_logging = logging;
+            this.tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
+            this.clientsList = new List<TcpClient>();
+            this.LogCollectionSingleton = LogCollectionSingleton.Instance;
+            this.LogCollectionSingleton.LogsCollection.CollectionChanged += ImageServer_CollectionChanged;
             folders = ConfigurationManager.AppSettings["Handler"].Split(';');
             
             //creates handler for each given folder
@@ -44,10 +56,42 @@ namespace ImageService.Server
                     createHandler(folder);
                 }catch(Exception exception)
                 {
-                    this.m_logging.Log("failed to listen to the folder: " + folder, Logging.Modal.MessageTypeEnum.FAIL);
+                    this.m_logging.Log("failed to listen to the folder: " + folder, MessageTypeEnum.FAIL);
                 }
             }
         }
+
+        public void AcceptClients()
+        {
+            this.tcpListener.Start();
+            while (true)
+            {
+                Task Accept = new Task(() =>
+                {
+                    TcpClient client = this.tcpListener.AcceptTcpClient();
+                    clientsList.Add(client);
+                    HandleClient(client);
+                });
+                Accept.Start();
+                
+
+            }
+        }
+
+        private void HandleClient(TcpClient client)
+        {
+            Task handle = new Task( ()=>
+                {
+                    NetworkStream stream = client.GetStream();
+                    BinaryReader reader = new BinaryReader(stream);
+                    BinaryWriter writer = new BinaryWriter(stream);
+                    String rawData = reader.ReadString();
+                    CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
+                    
+
+                });
+        }
+
         /// <summary>
         /// creates handler given a folder
         /// </summary>
@@ -58,7 +102,7 @@ namespace ImageService.Server
             this.CommandRecieved += handler.OnCommandRecieved;
             handler.DirectoryClose += removeHandler;
             handler.StartHandleDirectory(folder);
-            this.m_logging.Log("start watch the directory: " + folder, Logging.Modal.MessageTypeEnum.INFO);
+            this.m_logging.Log("start watch the directory: " + folder, MessageTypeEnum.INFO);
         }
         /// <summary>
         /// closing the server and notifies components related to the service operation.
@@ -66,10 +110,10 @@ namespace ImageService.Server
         public void CloseServer()
         {
             // invoking commandRecieved event with a close command arg
-            this.m_logging.Log("CloseServer start", Logging.Modal.MessageTypeEnum.INFO);
+            this.m_logging.Log("CloseServer start", MessageTypeEnum.INFO);
             CommandRecievedEventArgs args = new CommandRecievedEventArgs( (int)CommandEnum.CloseCommand, null, null );
             this.CommandRecieved?.Invoke(this, args);
-            this.m_logging.Log("server closed", Logging.Modal.MessageTypeEnum.INFO);
+            this.m_logging.Log("server closed", MessageTypeEnum.INFO);
         }
 
         /// <summary>
@@ -81,8 +125,13 @@ namespace ImageService.Server
         {
             IDirectoryHandler toRemove = (IDirectoryHandler)source; 
             this.CommandRecieved -= toRemove.OnCommandRecieved;
-            this.m_logging.Log(args.Message, Logging.Modal.MessageTypeEnum.INFO);
-            this.m_logging.Log("Handler closed", Logging.Modal.MessageTypeEnum.INFO);
+            this.m_logging.Log(args.Message, MessageTypeEnum.INFO);
+            this.m_logging.Log("Handler closed", MessageTypeEnum.INFO);
+        }
+
+        public void ImageServer_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
         }
     }
 }

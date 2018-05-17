@@ -1,15 +1,13 @@
-﻿
+﻿using infrastructure.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Infrastracture.Enums;
 
-namespace Gui
+namespace infrastructure
 {
-    public class LogItem 
+    public class LogItem
     {
         public MessageTypeEnum Type { get; set; }
         public string Message { get; set; }
