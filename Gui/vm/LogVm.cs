@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Text;
 using Gui.models;
 
-namespace Gui.vm
+namespace Gui.LogVM
 {
     public class LogVM :INotifyPropertyChanged
     {

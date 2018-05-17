@@ -61,10 +61,16 @@
     </ApplicationDefinition>
     <Compile Include="Connection\Client.cs" />
     <Compile Include="models\LogModel.cs" />
+    <Compile Include="models\SettingsModel.cs" />
     <Compile Include="views\Log.xaml.cs">
       <DependentUpon>Log.xaml</DependentUpon>
     </Compile>
+    <Compile Include="views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="vm\ISettingsVM.cs" />
     <Compile Include="vm\LogVM.cs" />
+    <Compile Include="vm\SettingsVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,6 +86,10 @@
     <Page Include="views\Log.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="views\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +119,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\infrastructure\Infrastructure.csproj">
       <Project>{e7a6f421-bbf1-4ef7-88a2-7227df531331}</Project>

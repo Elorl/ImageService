@@ -10,8 +10,9 @@
     <Grid>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TabItem Header="Settings">
-                <Grid Background="#FFE5E5E5"/>
-                
+                <Grid Background="#FFE5E5E5">
+                    <views:Settings/>
+                </Grid>
             </TabItem>
             <TabItem Header="Log">
                 <views:Log/>

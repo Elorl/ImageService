@@ -17,14 +17,14 @@ using Gui.SettingsVM;
 namespace Gui.views
 {
     /// <summary>
-    /// Interaction logic for LogUC.xaml
+    /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Log : UserControl
+    public partial class Settings : UserControl
     {
-        public Log()
+        public Settings()
         {
             InitializeComponent();
-            this.DataContext = new LogVM(); 
+            this.DataContext = new SettingsVM.SettingsVM();
         }
     }
 }
