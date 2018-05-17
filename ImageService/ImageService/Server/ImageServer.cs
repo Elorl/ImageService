@@ -14,6 +14,7 @@ using infrastructure.Enums;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
 using System.IO;
+using System.Threading;
 
 namespace ImageService.Server
 {
@@ -29,14 +30,15 @@ namespace ImageService.Server
 
         #region Properties
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
-   
+        public static Mutex WriteMutex { get; set; }
+        public static Mutex ReadMutex { get; set; }
         #endregion
         /// <summary>
         /// constructor.
         /// </summary>
         /// <param name="controller">controller</param>
         /// <param name="logging"> logger</param>
-       public ImageServer(IImageController controller, ILoggingService logging)
+        public ImageServer(IImageController controller, ILoggingService logging)
         {
             string[] folders;
             this.m_controller = controller;
@@ -44,7 +46,7 @@ namespace ImageService.Server
             this.tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
             this.clientsList = new List<TcpClient>();
             this.LogCollectionSingleton = LogCollectionSingleton.Instance;
-            this.LogCollectionSingleton.LogsCollection.CollectionChanged += ImageServer_CollectionChanged;
+            this.LogCollectionSingleton.LogsCollection.CollectionChanged += ImageServer_LogCollectionChanged;
             folders = ConfigurationManager.AppSettings["Handler"].Split(';');
             
             //creates handler for each given folder
@@ -85,11 +87,42 @@ namespace ImageService.Server
                     NetworkStream stream = client.GetStream();
                     BinaryReader reader = new BinaryReader(stream);
                     BinaryWriter writer = new BinaryWriter(stream);
-                    String rawData = reader.ReadString();
-                    CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
-                    
+                    bool successFlag;
+                    string result;
+                    while(true)
+                    {
+                        //todo HOW TO DISCONNECT CLIENT FROM SERVER $$$
+                        ReadMutex.WaitOne();
+                        String rawData = reader.ReadString();
+                        ReadMutex.ReleaseMutex();
+                        CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
 
+                        result = m_controller.ExecuteCommand(commandArgs.CommandID, commandArgs.Args, out successFlag);
+                        WriteMutex.WaitOne();
+                        writer.Write(result);
+                        WriteMutex.ReleaseMutex();
+                    }
                 });
+        }
+
+        private void NotigyChangeToAllClients(CommandRecievedEventArgs args)
+        {
+            
+            foreach (TcpClient client in clientsList)
+            {
+                Task notify = new Task(()=> 
+                {
+                    NetworkStream stream = client.GetStream();
+                    BinaryReader reader = new BinaryReader(stream);
+                    BinaryWriter writer = new BinaryWriter(stream);
+                    string rawData;
+
+                    WriteMutex.WaitOne();
+                    rawData = reader.ReadString();
+                    writer.Write(JsonConvert.SerializeObject(args));
+                    WriteMutex.ReleaseMutex();
+                });
+            }
         }
 
         /// <summary>
@@ -129,9 +162,12 @@ namespace ImageService.Server
             this.m_logging.Log("Handler closed", MessageTypeEnum.INFO);
         }
 
-        public void ImageServer_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e)
+        public void ImageServer_LogCollectionChanged (object sender, NotifyCollectionChangedEventArgs e)
         {
-            
+            string[] commandArgs = new string[1];
+            commandArgs[0] = JsonConvert.SerializeObject(e.NewItems);
+            CommandRecievedEventArgs args = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, commandArgs, "");
+            this.NotigyChangeToAllClients(args);
         }
     }
 }
