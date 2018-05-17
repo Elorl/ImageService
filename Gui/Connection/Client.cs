@@ -41,7 +41,7 @@ namespace Gui.Connection
                 Task readTask = new Task(() => {
                     while(true)
                     {
-                        rawData = reader.Read().ToString();
+                        rawData = reader.ReadString();
 
                         // todo : if it's close command $$$$$$$$$$
                         commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
