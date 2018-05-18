@@ -45,8 +45,7 @@ namespace ImageService.Server
             this.m_logging = logging;
             this.tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
             this.clientsList = new List<TcpClient>();
-            this.LogCollectionSingleton = LogCollectionSingleton.Instance;
-            this.LogCollectionSingleton.LogsCollection.CollectionChanged += ImageServer_LogCollectionChanged;
+            LogCollectionSingleton.Instance.LogsCollection.CollectionChanged += ImageServer_LogCollectionChanged;
             folders = ConfigurationManager.AppSettings["Handler"].Split(';');
             
             //creates handler for each given folder
@@ -68,13 +67,12 @@ namespace ImageService.Server
             this.tcpListener.Start();
             while (true)
             {
-                Task Accept = new Task(() =>
+                new Task(() =>
                 {
                     TcpClient client = this.tcpListener.AcceptTcpClient();
                     clientsList.Add(client);
                     HandleClient(client);
-                });
-                Accept.Start();
+                }).Start();
                 
 
             }
@@ -82,27 +80,27 @@ namespace ImageService.Server
 
         private void HandleClient(TcpClient client)
         {
-            Task handle = new Task( ()=>
-                {
-                    NetworkStream stream = client.GetStream();
-                    BinaryReader reader = new BinaryReader(stream);
-                    BinaryWriter writer = new BinaryWriter(stream);
-                    bool successFlag;
-                    string result;
-                    while(true)
-                    {
+            new Task(() =>
+               {
+                   NetworkStream stream = client.GetStream();
+                   BinaryReader reader = new BinaryReader(stream);
+                   BinaryWriter writer = new BinaryWriter(stream);
+                   bool successFlag;
+                   string result;
+                   while (true)
+                   {
                         //todo HOW TO DISCONNECT CLIENT FROM SERVER $$$
-                        ReadMutex.WaitOne();
-                        String rawData = reader.ReadString();
-                        ReadMutex.ReleaseMutex();
-                        CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
+                       ReadMutex.WaitOne();
+                       String rawData = reader.ReadString();
+                       ReadMutex.ReleaseMutex();
+                       CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
 
-                        result = m_controller.ExecuteCommand(commandArgs.CommandID, commandArgs.Args, out successFlag);
-                        WriteMutex.WaitOne();
-                        writer.Write(result);
-                        WriteMutex.ReleaseMutex();
-                    }
-                });
+                       result = m_controller.ExecuteCommand(commandArgs.CommandID, commandArgs.Args, out successFlag);
+                       WriteMutex.WaitOne();
+                       writer.Write(result);
+                       WriteMutex.ReleaseMutex();
+                   }
+               }).Start();
         }
 
         private void NotigyChangeToAllClients(CommandRecievedEventArgs args)
@@ -110,18 +108,16 @@ namespace ImageService.Server
             
             foreach (TcpClient client in clientsList)
             {
-                Task notify = new Task(()=> 
+                new Task(()=> 
                 {
                     NetworkStream stream = client.GetStream();
                     BinaryReader reader = new BinaryReader(stream);
                     BinaryWriter writer = new BinaryWriter(stream);
-                    string rawData;
 
                     WriteMutex.WaitOne();
-                    rawData = reader.ReadString();
                     writer.Write(JsonConvert.SerializeObject(args));
                     WriteMutex.ReleaseMutex();
-                });
+                }).Start();
             }
         }
 

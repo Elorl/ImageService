@@ -38,7 +38,7 @@ namespace Gui.Connection
                 client.Connect(endPoint);
                 string rawData;
                 CommandRecievedEventArgs commandArgs; 
-                Task readTask = new Task(() => {
+                new Task(() => {
                     while(true)
                     {
                         rawData = reader.ReadString();
@@ -48,14 +48,13 @@ namespace Gui.Connection
                         CommandRecieved?.Invoke(this, commandArgs);
                     }
                     
-                });
+                }).Start();
             }
             catch (Exception e)
             {
                 // change to gui print? something else? $$$
                 Console.Write(e.ToString());
             }
-
         }
         /// <summary>
         /// 

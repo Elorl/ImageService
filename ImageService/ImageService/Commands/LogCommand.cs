@@ -19,9 +19,23 @@ namespace ImageService.ImageService.Commands
         {
             this.logCollectionSingleton = LogCollectionSingleton.Instance;
         }
+        /// <summary>
+        /// returns the logs list after convertion to json.
+        /// </summary>
+        /// <param name="args">args</param>
+        /// <param name="result">succes flag</param>
+        /// <returns></returns>
         public string Execute(string[] args, out bool result)
         {
-            //return JsonConvert.SerializeObject(logCollectionSingleton);
+            result = true;
+            try
+            {
+                return JsonConvert.SerializeObject(logCollectionSingleton);
+            } catch(Exception e)
+            {
+                result = false;
+                return e.ToString();
+            }
         }
     }
 }
