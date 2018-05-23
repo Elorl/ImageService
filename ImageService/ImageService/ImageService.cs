@@ -44,7 +44,7 @@ namespace ImageService
 
     public partial class ImageService : ServiceBase
     {
-        private System.ComponentModel.IContainer components;
+        private System.ComponentModel.IContainer components; 
         private System.Diagnostics.EventLog eventLog1;
         private int eventId = 1;
         [DllImport("advapi32.dll", SetLastError = true)]
@@ -99,7 +99,7 @@ namespace ImageService
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
             eventLog1.WriteEntry("In OnStart");
-            
+            logCollectionSingleton.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "In OnStart"));
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
@@ -112,8 +112,10 @@ namespace ImageService
         {
             //DirectoryCloseEventArgs server and update log info
             eventLog1.WriteEntry("In onStop.");
+            logCollectionSingleton.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "In onStop."));
             this.m_imageServer.CloseServer();
             eventLog1.WriteEntry("everything stoped.");
+            logCollectionSingleton.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "everything stoped."));
         }
         /// <summary>
         /// activated when timer invokes
@@ -124,6 +126,7 @@ namespace ImageService
         {
             // TODO: Insert monitoring activities here.  
             eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
+            logCollectionSingleton.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "Monitoring the System"));
         }
 
         /// <summary>
@@ -132,6 +135,7 @@ namespace ImageService
         protected override void OnContinue()
         {
             eventLog1.WriteEntry("In OnContinue.");
+            logCollectionSingleton.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "In OnContinue."));
         }
         /// <summary>
         /// ivoked by event and wties to system log. specifically here by logger's event of messaging
@@ -155,6 +159,14 @@ namespace ImageService
             }
             eventLog1.WriteEntry(args.Message, messageType);
             logCollectionSingleton.LogsCollection.Add(new LogItem(args.Status, args.Message));
+        }
+
+        public void RunAsConsole(string[] args)
+        {
+            OnStart(args);
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+            OnStop();
         }
     }
 }

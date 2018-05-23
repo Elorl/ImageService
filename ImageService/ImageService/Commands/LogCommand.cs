@@ -6,8 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ImageService.Logging;
 using Newtonsoft.Json;
+using infrastructure.Events;
+using infrastructure.Enums;
+using infrastructure;
 
-namespace ImageService.ImageService.Commands
+namespace ImageService.Commands
 {
     public class LogCommand : ICommand
     {
@@ -30,7 +33,10 @@ namespace ImageService.ImageService.Commands
             result = true;
             try
             {
-                return JsonConvert.SerializeObject(logCollectionSingleton);
+                string[] str = new string[1];
+                str[0] = JsonConvert.SerializeObject(logCollectionSingleton.LogsCollection.ToList());
+                CommandRecievedEventArgs argsToReturn = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, str, "");
+                return JsonConvert.SerializeObject(argsToReturn);
             } catch(Exception e)
             {
                 result = false;

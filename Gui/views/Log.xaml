@@ -13,6 +13,21 @@
         <DataGrid ItemsSource="{Binding LogsCollection}" AutoGenerateColumns="False" CanUserAddRows="False"  VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Width="Auto" Height="Auto" Margin="0,0,0,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Type" IsReadOnly="True" Width="Auto"  Binding="{Binding Path=Type}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="INFO">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                </Trigger>
+                                <Trigger Property="Text" Value="FAIL">
+                                    <Setter Property="Background" Value= "Red"/>
+                                </Trigger>
+                                <Trigger Property="Text" Value="WARNING">
+                                    <Setter Property="Background" Value="Yellow"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Message"  IsReadOnly="True" Width="*" Binding="{Binding Message}" />
             </DataGrid.Columns>

@@ -15,6 +15,7 @@ using System.Collections.Specialized;
 using Newtonsoft.Json;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 
 namespace ImageService.Server
 {
@@ -23,15 +24,14 @@ namespace ImageService.Server
         #region Members
         private IImageController m_controller;
         private ILoggingService m_logging;
-        private LogCollectionSingleton LogCollectionSingleton;
         private TcpListener tcpListener;
         private List<TcpClient> clientsList;
         #endregion
 
         #region Properties
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
-        public static Mutex WriteMutex { get; set; }
-        public static Mutex ReadMutex { get; set; }
+        public static Mutex WriteMutex { get; set; } = new Mutex();
+        public static Mutex ReadMutex { get; set; } = new Mutex();
         #endregion
         /// <summary>
         /// constructor.
@@ -41,9 +41,14 @@ namespace ImageService.Server
         public ImageServer(IImageController controller, ILoggingService logging)
         {
             string[] folders;
-            this.m_controller = controller;
-            this.m_logging = logging;
-            this.tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
+            try {
+                
+                this.m_controller = controller;
+                this.m_logging = logging;
+                IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+                this.tcpListener = new TcpListener(ep);
+                this.tcpListener.Start();
+            } catch (Exception e) { Debug.Write(e.ToString()); }
             this.clientsList = new List<TcpClient>();
             LogCollectionSingleton.Instance.LogsCollection.CollectionChanged += ImageServer_LogCollectionChanged;
             folders = ConfigurationManager.AppSettings["Handler"].Split(';');
@@ -60,22 +65,20 @@ namespace ImageService.Server
                     this.m_logging.Log("failed to listen to the folder: " + folder + exception, MessageTypeEnum.FAIL);
                 }
             }
+            AcceptClients();
         }
 
         public void AcceptClients()
         {
-            this.tcpListener.Start();
-            while (true)
-            {
-                new Task(() =>
+            new Task(() => {
+                while (true)
                 {
                     TcpClient client = this.tcpListener.AcceptTcpClient();
                     clientsList.Add(client);
                     HandleClient(client);
-                }).Start();
-                
+                }
 
-            }
+            }).Start();
         }
 
         private void HandleClient(TcpClient client)

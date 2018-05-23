@@ -13,7 +13,10 @@ namespace ImageService.Logging
         private static LogCollectionSingleton instance;
         public ObservableCollection<LogItem> LogsCollection { get; private set; }
 
-        private LogCollectionSingleton() { } 
+        private LogCollectionSingleton()
+        {
+            LogsCollection = new ObservableCollection<LogItem>();
+        } 
 
         public static LogCollectionSingleton Instance
         {

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3BA2801C-D344-4983-B2B4-DF19E762C372}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>ImageService</RootNamespace>
     <AssemblyName>ImageService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -86,7 +86,6 @@
     <Compile Include="ImageService\Server\ImageServer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="ImageService\App.config" />
     <None Include="packages.config" />
   </ItemGroup>

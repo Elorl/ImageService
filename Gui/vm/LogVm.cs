@@ -10,12 +10,8 @@ using infrastructure;
 
 namespace Gui.LogVM
 {
-    public class LogVM :INotifyPropertyChanged
+    public class LogVM 
     {
-        //may be removed later? $$$
-        #region events
-        public event PropertyChangedEventHandler PropertyChanged;
-        #endregion
 
         #region members
         private LogModel logModel;
