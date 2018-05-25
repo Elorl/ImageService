@@ -15,7 +15,7 @@ namespace Gui.settingsVM
         #region events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
-        
+        private string _SelectedItem;
         public SettingsVM()
         {
             this.SettingsModel = new SettingsModel();
@@ -37,6 +37,17 @@ namespace Gui.settingsVM
         public int ThumbnailSize
         {
             get { return this.SettingsModel.ThumbnailSize; }
+        }
+        public string SelectedItem
+        {
+            get
+            {
+                return this._SelectedItem;
+            }
+            set
+            {
+                this._SelectedItem = value;
+            }
         }
         public ObservableCollection<string> Handlers
         {
