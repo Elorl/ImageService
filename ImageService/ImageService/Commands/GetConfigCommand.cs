@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace ImageService.Commands
 {
-    public class GetConfigCommand : ICommand
+    class getAppConfig : ICommand
     {
         string[] args = new string[5];
         public string Execute(string[] args, out bool result)

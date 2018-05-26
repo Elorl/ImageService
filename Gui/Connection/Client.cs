@@ -51,11 +51,12 @@ namespace Gui.Connection
         /// initializes members and connects to server
         /// </summary>
         /// <param name="endPoint">end point to connect (server socket)</param>
-        public void Start()
+        public bool Start()
         {
-            if(this.isOn) { return; }
+            if(this.isOn) { return true; }
 
             this.isOn = true;
+
             try
             {
                 //Auto choose client socket (no params)
@@ -65,7 +66,9 @@ namespace Gui.Connection
                 stream = client.GetStream();
                 reader = new BinaryReader(stream);
                 writer = new BinaryWriter(stream);
-                string rawData;
+            }
+            catch (Exception e) { return false; }
+            string rawData;
                 CommandRecievedEventArgs commandArgs;
                 // ask for all logs by now
                 CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
@@ -74,20 +77,21 @@ namespace Gui.Connection
                 new Task(() => {
                     while(true)
                     {
-                        rawData = reader.ReadString();
+                        try
+                        {
+                            rawData = reader.ReadString();
 
-                        // todo : if it's close command $$$$$$$$$$
-                        commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
-                        CommandRecieved?.Invoke(this, commandArgs);
+                            commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
+                            CommandRecieved?.Invoke(this, commandArgs);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.Write(e.ToString());
+                        }
                     }
                     
                 }).Start();
-            }
-            catch (Exception e)
-            {
-                // change to gui print? something else? $$$
-                Console.Write(e.ToString());
-            }
+            return true;
         }
         /// <summary>
         /// 
@@ -98,7 +102,10 @@ namespace Gui.Connection
             //needed because server may try to send log while we want to send request of setttings ??
             Task writeTask = new Task(()=>
             {
-                writer.Write(JsonConvert.SerializeObject(args));
+                try
+                {
+                    writer.Write(JsonConvert.SerializeObject(args));
+                } catch(Exception e) {;}
             });
         }
     }

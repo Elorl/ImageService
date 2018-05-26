@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-
+using System.Windows.Media;
 
 namespace Gui.models
 {
@@ -30,20 +30,17 @@ namespace Gui.models
 
         public LogModel()
         {
+            bool isSuccessfulConnect;
             this.LogsCollection = new ObservableCollection<LogItem>();
             this.logsCollectionLock = new object();
             BindingOperations.EnableCollectionSynchronization(logsCollection, logsCollectionLock);
             this.client = Client.Instance;
             this.client.CommandRecieved += LogModel_CommandRecieved;
-            this.client.Start();
-            //testing binding $$$$$$$$$
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "c is too #"));
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "Pleasse help me H'"));
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.FAIL, "some Log"));
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "I love Linux"));
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.INFO, "some Dog"));
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.FAIL, "Microsoft is JIFFA"));
-            this.LogsCollection.Add(new LogItem(MessageTypeEnum.WARNING, "Microsoft is JIFFA"));
+            isSuccessfulConnect = this.client.Start();
+            if (!isSuccessfulConnect)
+            {
+                Application.Current.MainWindow.Background = new SolidColorBrush(Colors.DarkGray);
+            }
         }
 
         public void LogModel_CommandRecieved(object sender, CommandRecievedEventArgs args)

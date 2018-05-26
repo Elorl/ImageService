@@ -11,7 +11,7 @@ namespace Gui.settingsVM
         string OutputDir { get; }
         string SourceName { get; }
         string LogName { get; }
-        string ThumbnailSize { get; }
+        int ThumbnailSize { get; }
         ObservableCollection<string> Handlers { get; set; }
     }
 }
