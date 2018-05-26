@@ -30,7 +30,7 @@
             <TextBlock Grid.Row="2" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=LogName}"></TextBlock>
             <TextBlock Grid.Row="3" Padding="3" Margin="3">Thumbnail Size:</TextBlock>
             <TextBlock Grid.Row="3" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=ThumbnailSize}"></TextBlock>
-            <Button x:Name="btnRemove" Grid.Row="4" Grid.ColumnSpan="2" HorizontalContentAlignment="Center">Remove</Button>
+            <Button x:Name="btnRemove" Grid.Row="4" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
             <ListBox x:Name="listBoxHandlers" Grid.Row="5" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" SelectionMode="Single" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Handlers}" SelectedItem="{Binding SelectedItem}"></ListBox>
         </Grid>
 

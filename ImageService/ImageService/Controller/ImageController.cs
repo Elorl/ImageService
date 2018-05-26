@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Server;
 
 namespace ImageService.Controller
 {
@@ -14,6 +15,7 @@ namespace ImageService.Controller
         #region members
         private IImageServiceModal m_modal;                      // The Modal Object
         private Dictionary<int, ICommand> commands;
+        private ImageServer m_imageServer;
         #endregion
 
         /// <summary>
@@ -26,9 +28,19 @@ namespace ImageService.Controller
             commands = new Dictionary<int, ICommand>()
             {
                 {(int)CommandEnum.NewFileCommand, new NewFileCommand(this.m_modal)},
-                {(int)CommandEnum.LogCommand, new LogCommand()}
+                {(int)CommandEnum.LogCommand, new LogCommand()},
+                {(int)CommandEnum.GetConfigCommand, new GetConfigCommand()}
             };
-			// For Now will contain NEW_FILE_COMMAND
+            
+        }
+
+        public ImageServer ImageServer
+        {
+            set
+            {
+                this.m_imageServer = value;
+                this.commands[(int)CommandEnum.CloseCommand] = new CloseCommand(this.m_imageServer);
+            }
         }
         /// <summary>
         /// executing command from the dictionary by a given ID

@@ -80,6 +80,7 @@ namespace ImageService
             };
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
+            this.controller.ImageServer = this.m_imageServer;
         }
         /// <summary>
         /// beeing activated in service start
