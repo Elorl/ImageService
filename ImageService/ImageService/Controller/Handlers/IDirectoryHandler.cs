@@ -15,3 +15,4 @@ namespace ImageService.Controller.Handlers
         void EndHandle();
     }
 }
+

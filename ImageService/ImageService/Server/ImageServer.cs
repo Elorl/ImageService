@@ -68,6 +68,7 @@ namespace ImageService.Server
             AcceptClients();
         }
 
+
         public void AcceptClients()
         {
             new Task(() => {

@@ -16,3 +16,4 @@ namespace ImageService.Modal
         string AddFile(string path, out bool result);
     }
 }
+

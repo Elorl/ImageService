@@ -17,6 +17,7 @@ using System.Configuration;
 using infrastructure.Enums;
 using infrastructure;
 
+
 namespace ImageService
 {
     public enum ServiceState
