@@ -23,14 +23,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Padding="3" Margin="3">Output Directory:</TextBlock>
-            <TextBlock Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=OutputDir}"></TextBlock>
+            <TextBlock Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=OutputDirVM}"></TextBlock>
             <TextBlock Grid.Row="1" Padding="3" Margin="3">Source Name:</TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=SourceName}"></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=SourceNameVM}"></TextBlock>
             <TextBlock Grid.Row="2" Padding="3" Margin="3">Log Name:</TextBlock>
-            <TextBlock Grid.Row="2" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=LogName}"></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=LogNameVM}"></TextBlock>
             <TextBlock Grid.Row="3" Padding="3" Margin="3">Thumbnail Size:</TextBlock>
-            <TextBlock Grid.Row="3" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=ThumbnailSize}"></TextBlock>
-            <Button x:Name="btnRemove" Grid.Row="4" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
+            <TextBlock Grid.Row="3" Grid.Column="2" Padding="2" Margin="2" Text="{Binding Path=ThumbnailSizeVM}"></TextBlock>
+            <Button x:Name="btnRemove" Grid.Row="4" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" Command="{Binding RemoveCommand}" AutomationProperties.AutomationId="btnRemove">Remove</Button>
             <ListBox x:Name="listBoxHandlers" Grid.Row="5" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" SelectionMode="Single" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Handlers}" SelectedItem="{Binding SelectedItem}"></ListBox>
         </Grid>
 

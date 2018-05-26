@@ -12,15 +12,15 @@ namespace ImageService.Commands
 {
     public class GetConfigCommand : ICommand
     {
-        string[] args = new string[5];
+        string[] argsConfig = new string[5];
         public string Execute(string[] args, out bool result)
         {
-            args[0] = ConfigurationManager.AppSettings.Get("OutputDir");
-            args[1] = ConfigurationManager.AppSettings.Get("SourceName");
-            args[2] = ConfigurationManager.AppSettings.Get("LogName");
-            args[3] = ConfigurationManager.AppSettings.Get("ThumbnailSize");
-            args[4] = ConfigurationManager.AppSettings.Get("Handler");
-            CommandRecievedEventArgs commandRecievedEventArgs = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, args, "");
+            argsConfig[0] = ConfigurationManager.AppSettings.Get("OutputDir");
+            argsConfig[1] = ConfigurationManager.AppSettings.Get("SourceName");
+            argsConfig[2] = ConfigurationManager.AppSettings.Get("LogName");
+            argsConfig[3] = ConfigurationManager.AppSettings.Get("ThumbnailSize");
+            argsConfig[4] = ConfigurationManager.AppSettings.Get("Handler");
+            CommandRecievedEventArgs commandRecievedEventArgs = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, argsConfig, "");
             result = true;
             return JsonConvert.SerializeObject(commandRecievedEventArgs);
         }

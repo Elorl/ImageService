@@ -41,8 +41,8 @@ namespace Gui.models
             this._OutputDir = string.Empty;
             this._LogName = string.Empty;
             this._ThumbnailSize = string.Empty;
-            CommandRecievedEventArgs initializeSettings = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, null, "");
-            this.client.SendCommand(initializeSettings);
+            //CommandRecievedEventArgs initializeSettings = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, null, "");
+            //this.client.SendCommand(initializeSettings);
         }
         public void SendCommand(CommandRecievedEventArgs command)
         {
