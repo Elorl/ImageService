@@ -26,6 +26,7 @@ namespace ImageService.Server
         private ILoggingService m_logging;
         private TcpListener tcpListener;
         private List<TcpClient> clientsList;
+        private Dictionary<string, IDirectoryHandler> handlers;
         #endregion
 
         #region Properties
@@ -43,7 +44,6 @@ namespace ImageService.Server
         {
             string[] folders;
             try {
-                
                 this.m_controller = controller;
                 this.m_logging = logging;
                 IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
@@ -168,6 +168,7 @@ namespace ImageService.Server
         private void createHandler(string folder)
         {
             IDirectoryHandler handler = new DirectoyHandler(this.m_controller, this.m_logging, folder);
+            this.handlers.Add(folder, handler);
             this.CommandRecieved += handler.OnCommandRecieved;
             handler.DirectoryClose += removeHandler;
             handler.StartHandleDirectory(folder);
@@ -204,6 +205,19 @@ namespace ImageService.Server
             commandArgs[0] = JsonConvert.SerializeObject(e.NewItems);
             CommandRecievedEventArgs args = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, commandArgs, "");
             this.NotigyChangeToAllClients(args);
+        }
+
+        public void CloseHandler(string handlerPath)
+        {
+            if (this.handlers.ContainsKey(handlerPath))
+            {
+                IDirectoryHandler handler = handlers[handlerPath];
+                handler.EndHandle();
+                string[] args = new string[1];
+                args[0] = handlerPath;
+                CommandRecievedEventArgs close = new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, args, "");
+                NotifyChangeToAllClients(close);
+            }
         }
     }
 }
