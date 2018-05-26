@@ -49,6 +49,7 @@ namespace ImageService.Server
                 IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
                 this.tcpListener = new TcpListener(ep);
                 this.tcpListener.Start();
+                this.handlers = new Dictionary<string, IDirectoryHandler>();
             } catch (Exception e) { this.m_logging.Log("Couldn't establish tcp server: " + e.ToString(), MessageTypeEnum.FAIL); }
 
             this.m_logging.Log("Tcp server established: ", MessageTypeEnum.INFO);

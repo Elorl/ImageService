@@ -94,11 +94,11 @@ namespace Gui.models
 
         public void SettingsModel_CommandRecieved(object sender, CommandRecievedEventArgs args)
         {
-            if (args.CommandID != (int)CommandEnum.GetConfigCommand)
+            if (args.CommandID == (int)CommandEnum.GetConfigCommand)
             {
                 GetConfigHandle(args);
             }
-            else if (args.CommandID != (int)CommandEnum.CloseCommand)
+            else if (args.CommandID == (int)CommandEnum.CloseCommand)
             {
                 CloseCommandHandle(args);
             }
