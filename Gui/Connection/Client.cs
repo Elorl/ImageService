@@ -69,28 +69,27 @@ namespace Gui.Connection
             }
             catch (Exception e) { return false; }
             string rawData;
-                CommandRecievedEventArgs commandArgs;
-                // ask for all logs by now
-                CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
-                string SerialArgs = JsonConvert.SerializeObject(logCommandArgs);
-                writer.Write(SerialArgs);
-                new Task(() => {
-                    while(true)
+            CommandRecievedEventArgs commandArgs;
+            // ask for all logs by now
+            CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
+            string SerialArgs = JsonConvert.SerializeObject(logCommandArgs);
+            writer.Write(SerialArgs);
+            new Task(() => {
+                while(true)
+                {
+                    try
                     {
-                        try
-                        {
-                            rawData = reader.ReadString();
+                        rawData = reader.ReadString();
 
-                            commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
-                            CommandRecieved?.Invoke(this, commandArgs);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.Write(e.ToString());
-                        }
+                        commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
+                        CommandRecieved?.Invoke(this, commandArgs);
                     }
-                    
-                }).Start();
+                    catch (Exception e)
+                    {
+                        Console.Write(e.ToString());
+                    }
+                }
+            }).Start();
             return true;
         }
         /// <summary>
