@@ -26,13 +26,13 @@ namespace ImageService.Server
         private ILoggingService m_logging;
         private TcpListener tcpListener;
         private List<TcpClient> clientsList;
-        private Dictionary<string, IDirectoryHandler> handlers;
         #endregion
 
         #region Properties
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
         public static Mutex WriteMutex { get; set; } = new Mutex();
         public static Mutex ReadMutex { get; set; } = new Mutex();
+        public static Mutex ClientsListMutex { get; set; } = new Mutex();
         #endregion
         /// <summary>
         /// constructor.
@@ -43,12 +43,15 @@ namespace ImageService.Server
         {
             string[] folders;
             try {
+                
                 this.m_controller = controller;
                 this.m_logging = logging;
                 IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
                 this.tcpListener = new TcpListener(ep);
                 this.tcpListener.Start();
-            } catch (Exception e) { Debug.Write(e.ToString()); }
+            } catch (Exception e) { this.m_logging.Log("Couldn't establish tcp server: " + e.ToString(), MessageTypeEnum.FAIL); }
+
+            this.m_logging.Log("Tcp server established: ", MessageTypeEnum.INFO);
             this.clientsList = new List<TcpClient>();
             LogCollectionSingleton.Instance.LogsCollection.CollectionChanged += ImageServer_LogCollectionChanged;
             folders = ConfigurationManager.AppSettings["Handler"].Split(';');
@@ -73,9 +76,16 @@ namespace ImageService.Server
             new Task(() => {
                 while (true)
                 {
-                    TcpClient client = this.tcpListener.AcceptTcpClient();
-                    clientsList.Add(client);
-                    HandleClient(client);
+                    try
+                    {
+                        TcpClient client = this.tcpListener.AcceptTcpClient();
+                        clientsList.Add(client);
+                        HandleClient(client);
+                    }
+                    catch (Exception e)
+                    {
+                        this.m_logging.Log("failed connecting a client", MessageTypeEnum.FAIL);
+                    }
                 }
 
             }).Start();
@@ -85,41 +95,67 @@ namespace ImageService.Server
         {
             new Task(() =>
                {
-                   NetworkStream stream = client.GetStream();
-                   BinaryReader reader = new BinaryReader(stream);
-                   BinaryWriter writer = new BinaryWriter(stream);
-                   bool successFlag;
-                   string result;
-                   while (true)
+                   try
                    {
-                        //todo HOW TO DISCONNECT CLIENT FROM SERVER $$$
-                       ReadMutex.WaitOne();
-                       String rawData = reader.ReadString();
-                       ReadMutex.ReleaseMutex();
-                       CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
+                       NetworkStream stream = client.GetStream();
+                       BinaryReader reader = new BinaryReader(stream);
+                       BinaryWriter writer = new BinaryWriter(stream);
+                       bool successFlag;
+                       string result;
+                       while (true)
+                       {
 
-                       result = m_controller.ExecuteCommand(commandArgs.CommandID, commandArgs.Args, out successFlag);
-                       WriteMutex.WaitOne();
-                       writer.Write(result);
-                       WriteMutex.ReleaseMutex();
+                           String rawData = reader.ReadString();
+                           CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
+
+                           result = m_controller.ExecuteCommand(commandArgs.CommandID, commandArgs.Args, out successFlag);
+                           WriteMutex.WaitOne();
+                           writer.Write(result);
+                           WriteMutex.ReleaseMutex();
+
+                       }
+                   }
+                   catch (Exception e)
+                   {
+                       //remove the problematic client from clients list
+                       ClientsListMutex.WaitOne();
+                       clientsList.Remove(client);
+                       ClientsListMutex.ReleaseMutex();
+                       //log failure
+                       this.m_logging.Log(e.ToString(), MessageTypeEnum.FAIL);
+                       this.m_logging.Log("one of clients is possibly disconnected", MessageTypeEnum.FAIL);
+                       return;
                    }
                }).Start();
         }
 
-        private void NotifyChangeToAllClients(CommandRecievedEventArgs args)
+        private void NotigyChangeToAllClients(CommandRecievedEventArgs args)
         {
             
             foreach (TcpClient client in clientsList)
             {
                 new Task(()=> 
                 {
-                    NetworkStream stream = client.GetStream();
-                    BinaryReader reader = new BinaryReader(stream);
-                    BinaryWriter writer = new BinaryWriter(stream);
+                    try
+                    {
+                        NetworkStream stream = client.GetStream();
+                        BinaryReader reader = new BinaryReader(stream);
+                        BinaryWriter writer = new BinaryWriter(stream);
 
-                    WriteMutex.WaitOne();
-                    writer.Write(JsonConvert.SerializeObject(args));
-                    WriteMutex.ReleaseMutex();
+                        WriteMutex.WaitOne();
+                        writer.Write(JsonConvert.SerializeObject(args));
+                        WriteMutex.ReleaseMutex();
+                    } catch(Exception e)
+                    {
+                        //remove the problematic client from clients list
+                        ClientsListMutex.WaitOne();
+                        clientsList.Remove(client);
+                        ClientsListMutex.ReleaseMutex();
+                        // log failure
+                        this.m_logging.Log(e.ToString(), MessageTypeEnum.FAIL);
+                        this.m_logging.Log("Client is possibly disconnected", MessageTypeEnum.FAIL);
+                        //!will continue treating next client naturally!
+                    }
                 }).Start();
             }
         }
@@ -131,7 +167,6 @@ namespace ImageService.Server
         private void createHandler(string folder)
         {
             IDirectoryHandler handler = new DirectoyHandler(this.m_controller, this.m_logging, folder);
-            this.handlers.Add(folder, handler);
             this.CommandRecieved += handler.OnCommandRecieved;
             handler.DirectoryClose += removeHandler;
             handler.StartHandleDirectory(folder);
@@ -167,20 +202,7 @@ namespace ImageService.Server
             string[] commandArgs = new string[1];
             commandArgs[0] = JsonConvert.SerializeObject(e.NewItems);
             CommandRecievedEventArgs args = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, commandArgs, "");
-            this.NotifyChangeToAllClients(args);
-        }
-        
-        public void CloseHandler(string handlerPath)
-        {
-            if(this.handlers.ContainsKey(handlerPath))
-            {
-                IDirectoryHandler handler = handlers[handlerPath];
-                handler.EndHandle();
-                string[] args = new string[1];
-                args[0] = handlerPath;
-                CommandRecievedEventArgs close = new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, args, "");
-                NotifyChangeToAllClients(close);
-            }
+            this.NotigyChangeToAllClients(args);
         }
     }
 }
