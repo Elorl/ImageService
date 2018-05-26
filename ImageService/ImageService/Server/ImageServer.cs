@@ -130,7 +130,7 @@ namespace ImageService.Server
                }).Start();
         }
 
-        private void NotigyChangeToAllClients(CommandRecievedEventArgs args)
+        private void NotifyChangeToAllClients(CommandRecievedEventArgs args)
         {
             
             foreach (TcpClient client in clientsList)
@@ -204,7 +204,7 @@ namespace ImageService.Server
             string[] commandArgs = new string[1];
             commandArgs[0] = JsonConvert.SerializeObject(e.NewItems);
             CommandRecievedEventArgs args = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, commandArgs, "");
-            this.NotigyChangeToAllClients(args);
+            this.NotifyChangeToAllClients(args);
         }
 
         public void CloseHandler(string handlerPath)
