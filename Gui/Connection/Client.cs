@@ -75,6 +75,9 @@ namespace Gui.Connection
             this.isOn = true;
             string rawData;
             CommandRecievedEventArgs commandArgs;
+            //CommandRecievedEventArgs initializeSettings = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, null, "");
+            //string SerialArgs = JsonConvert.SerializeObject(initializeSettings);
+            //writer.Write(SerialArgs);
             // ask for all logs by now
             CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
             string SerialArgs = JsonConvert.SerializeObject(logCommandArgs);
@@ -111,6 +114,7 @@ namespace Gui.Connection
                     writer.Write(JsonConvert.SerializeObject(args));
                 } catch(Exception e) {;}
             });
+            writeTask.Start();
         }
     }
 }

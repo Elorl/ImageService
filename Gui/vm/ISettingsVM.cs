@@ -8,10 +8,10 @@ namespace Gui.settingsVM
 {
     interface ISettingsVM
     {
-        string OutputDir { get; }
-        string SourceName { get; }
-        string LogName { get; }
-        string ThumbnailSize { get; }
+        string OutputDirVM { get; }
+        string SourceNameVM { get; }
+        string LogNameVM { get; }
+        string ThumbnailSizeVM { get; }
         ObservableCollection<string> Handlers { get; set; }
     }
 }

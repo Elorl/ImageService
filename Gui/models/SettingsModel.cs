@@ -11,6 +11,8 @@ using infrastructure.Enums;
 using infrastructure.Events;
 using Newtonsoft.Json;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows;
 
 namespace Gui.models
 {
@@ -36,7 +38,13 @@ namespace Gui.models
             BindingOperations.EnableCollectionSynchronization(handlers, SettingsCollectionLock);
             this.client = Client.Instance;
             this.client.CommandRecieved += SettingsModel_CommandRecieved;
-            this.client.Start();
+            bool returnVal ;
+            returnVal = this.client.Start();
+            if(!returnVal)
+            {
+                Application.Current.MainWindow.Background = new SolidColorBrush(Colors.DarkGray);
+
+            }
             this._OutputDir = string.Empty;
             this._OutputDir = string.Empty;
             this._LogName = string.Empty;

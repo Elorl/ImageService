@@ -37,6 +37,8 @@ namespace Gui.models
             this.client = Client.Instance;
             this.client.CommandRecieved += LogModel_CommandRecieved;
             isSuccessfulConnect = this.client.Start();
+            //CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
+            //this.client.SendCommand(logCommandArgs);
             if (!isSuccessfulConnect)
             {
                 //Application.Current.MainWindow.Background = new SolidColorBrush(Colors.DarkGray);

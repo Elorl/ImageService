@@ -24,24 +24,24 @@ namespace Gui.settingsVM
         {
             this.SettingsModel = new SettingsModel();
             this.SettingsModel.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e) {
-                NotifyPropertyChanged("VM_" + e.PropertyName);
+                NotifyPropertyChanged(e.PropertyName + "VM");
             };
             this.RemoveCommand = new DelegateCommand<object>(this.OnRemove, CanRemove);
         }
 
-        public string OutputDir
+        public string OutputDirVM
         {
             get { return this.SettingsModel.OutputDir; }
         }
-        public string SourceName
+        public string SourceNameVM
         {
             get { return this.SettingsModel.SourceName; }
         }
-        public string LogName
+        public string LogNameVM
         {
             get { return this.SettingsModel.LogName; }
         }
-        public string ThumbnailSize
+        public string ThumbnailSizeVM
         {
             get { return this.SettingsModel.ThumbnailSize; }
         }
