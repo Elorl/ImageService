@@ -46,6 +46,8 @@ namespace ImageService.Server
             try {
                 this.m_controller = controller;
                 this.m_logging = logging;
+                
+                //establish a tcp connection
                 IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
                 this.tcpListener = new TcpListener(ep);
                 this.tcpListener.Start();
@@ -72,7 +74,9 @@ namespace ImageService.Server
             AcceptClients();
         }
 
-
+        /// <summary>
+        /// Opens a new task listening to incoming clients, accepts them and passing them to handleClient func.
+        /// </summary>
         public void AcceptClients()
         {
             new Task(() => {
@@ -92,7 +96,10 @@ namespace ImageService.Server
 
             }).Start();
         }
-
+        /// <summary>
+        /// handling a single client in a task.
+        /// </summary>
+        /// <param name="client">client to be handled</param>
         private void HandleClient(TcpClient client)
         {
             new Task(() =>
@@ -106,7 +113,7 @@ namespace ImageService.Server
                        string result;
                        while (true)
                        {
-
+                           //read client data request in the form of a command, then return data
                            String rawData = reader.ReadString();
                            CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
 
@@ -129,7 +136,10 @@ namespace ImageService.Server
                    }
                }).Start();
         }
-
+        /// <summary>
+        /// activated when log of handlers event occurs. updates all clients in change.
+        /// </summary>
+        /// <param name="args">args containing changes</param>
         private void NotifyChangeToAllClients(CommandRecievedEventArgs args)
         {
             
@@ -206,7 +216,10 @@ namespace ImageService.Server
             CommandRecievedEventArgs args = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, commandArgs, "");
             this.NotifyChangeToAllClients(args);
         }
-
+        /// <summary>
+        /// reacting to a handler close request.
+        /// </summary>
+        /// <param name="handlerPath">handler to be closed</param>
         public void CloseHandler(string handlerPath)
         {
             if (this.handlers.ContainsKey(handlerPath))

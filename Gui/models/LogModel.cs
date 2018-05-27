@@ -27,22 +27,31 @@ namespace Gui.models
             {  logsCollection = value; }
         }
         #endregion
-
+        /// <summary>
+        /// constructor.
+        /// </summary>
         public LogModel()
         {
-            bool isSuccessfulConnect;
+            //Enable change of collection outside main thread
             this.LogsCollection = new ObservableCollection<LogItem>();
             this.logsCollectionLock = new object();
             BindingOperations.EnableCollectionSynchronization(logsCollection, logsCollectionLock);
+            //get an instance of client and register to the command recieved event
             this.client = Client.Instance;
             this.client.CommandRecieved += LogModel_CommandRecieved;
+            //sttart and request all log entries by now
             this.client.Start();
             CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
             this.client.SendCommand(logCommandArgs);
 
 
         }
-
+        /// <summary>
+        /// 
+        /// invoked when a command is recieved in client. update logs if it's a log command.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void LogModel_CommandRecieved(object sender, CommandRecievedEventArgs args)
         {
             //ignore if it isn't a log command

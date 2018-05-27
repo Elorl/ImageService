@@ -9,8 +9,10 @@ namespace infrastructure
 {
     public class LogItem
     {
+        #region properties
         public MessageTypeEnum Type { get; set; }
         public string Message { get; set; }
+        #endregion
 
         public LogItem(MessageTypeEnum type, string message)
         {
