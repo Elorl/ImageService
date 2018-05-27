@@ -75,13 +75,6 @@ namespace Gui.Connection
             this.isOn = true;
             string rawData;
             CommandRecievedEventArgs commandArgs;
-            //CommandRecievedEventArgs initializeSettings = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, null, "");
-            //string SerialArgs = JsonConvert.SerializeObject(initializeSettings);
-            //writer.Write(SerialArgs);
-            // ask for all logs by now
-            CommandRecievedEventArgs logCommandArgs = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, null, "");
-            string SerialArgs = JsonConvert.SerializeObject(logCommandArgs);
-            writer.Write(SerialArgs);
             new Task(() => {
                 while(true)
                 {
@@ -106,15 +99,10 @@ namespace Gui.Connection
         /// <param name="args"></param>
         public void SendCommand(CommandRecievedEventArgs args)
         {
-            //needed because server may try to send log while we want to send request of setttings ??
-            Task writeTask = new Task(()=>
+            try
             {
-                try
-                {
-                    writer.Write(JsonConvert.SerializeObject(args));
-                } catch(Exception e) {;}
-            });
-            writeTask.Start();
+                writer.Write(JsonConvert.SerializeObject(args));
+            } catch(Exception e) {;}
         }
     }
 }

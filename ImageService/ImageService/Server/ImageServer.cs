@@ -124,8 +124,7 @@ namespace ImageService.Server
                        clientsList.Remove(client);
                        ClientsListMutex.ReleaseMutex();
                        //log failure
-                       this.m_logging.Log(e.ToString(), MessageTypeEnum.FAIL);
-                       this.m_logging.Log("one of clients is possibly disconnected", MessageTypeEnum.FAIL);
+                       this.m_logging.Log("One of clients seems to be offline", MessageTypeEnum.FAIL);
                        return;
                    }
                }).Start();
@@ -155,7 +154,7 @@ namespace ImageService.Server
                         ClientsListMutex.ReleaseMutex();
                         // log failure
                         this.m_logging.Log(e.ToString(), MessageTypeEnum.FAIL);
-                        this.m_logging.Log("Client is possibly disconnected", MessageTypeEnum.FAIL);
+                        this.m_logging.Log("One of clients seems to be offline", MessageTypeEnum.FAIL);
                         //!will continue treating next client naturally!
                     }
                 }).Start();
