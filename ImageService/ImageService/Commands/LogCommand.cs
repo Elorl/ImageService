@@ -33,9 +33,12 @@ namespace ImageService.Commands
             result = true;
             try
             {
+                //serialize the new logs list in order to store in command args member of a string array type
                 string[] str = new string[1];
                 str[0] = JsonConvert.SerializeObject(logCollectionSingleton.LogsCollection.ToList());
+                //create logs command with th new logs list
                 CommandRecievedEventArgs argsToReturn = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, str, "");
+                //serialize whole of it in order to return as string as the generic execute func declares
                 return JsonConvert.SerializeObject(argsToReturn);
             } catch(Exception e)
             {
