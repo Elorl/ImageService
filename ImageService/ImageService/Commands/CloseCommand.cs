@@ -40,6 +40,7 @@ namespace ImageService.Commands
                 String newRowHandlers = newHandlers.ToString().TrimEnd(';');
                 configuration.AppSettings.Settings.Add("Handler", newRowHandlers);
                 configuration.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
                 this.imageServer.CloseHandler(args[0]);
                 return "directory" + args[0] + "successfully closed.";
             }
