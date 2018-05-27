@@ -10,6 +10,7 @@ namespace Gui.models
     public class MainWindowModel
     {
         #region properties
+        //check if connected to server.
         public bool IsConnected
         {
            get{ return Client.Instance.isOn; }

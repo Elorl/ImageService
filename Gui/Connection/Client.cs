@@ -45,7 +45,9 @@ namespace Gui.Connection
         #region events
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         #endregion
-
+        /// <summary>
+        /// constructor.
+        /// </summary>
         private Client(){
             this.isConnectionAttemptDone = false;
             this.isOn = false;
@@ -54,7 +56,6 @@ namespace Gui.Connection
         /// <summary>
         /// initializes members and connects to server
         /// </summary>
-        /// <param name="endPoint">end point to connect (server socket)</param>
         public bool Start()
         {
             if(this.isConnectionAttemptDone) { return isOn; }
@@ -85,16 +86,13 @@ namespace Gui.Connection
                         commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
                         CommandRecieved?.Invoke(this, commandArgs);
                     }
-                    catch (Exception e)
-                    {
-                        Console.Write(e.ToString());
-                    }
+                    catch (Exception e){;}
                 }
             }).Start();
             return true;
         }
         /// <summary>
-        /// 
+        /// sends command to server.
         /// </summary>
         /// <param name="args"></param>
         public void SendCommand(CommandRecievedEventArgs args)

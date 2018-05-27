@@ -13,11 +13,16 @@ namespace Gui.vm
         #region members
         MainWindowModel mainWindowModel;
         #endregion
+
         #region properties
+
+        // retrieving if gui is connected to service or not
         public bool IsConnected
         {
            get{ return this.mainWindowModel.IsConnected; }
         }
+
+        // determine background color by connection status
         public Color Backgroundcolor
         {
             get

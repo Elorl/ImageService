@@ -47,6 +47,8 @@ namespace ImageService.Server
             try {
                 this.m_controller = controller;
                 this.m_logging = logging;
+                
+                //establish a tcp connection
                 IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
                 this.tcpListener = new TcpListener(ep);
                 this.tcpListener.Start();
@@ -116,6 +118,7 @@ namespace ImageService.Server
                        string result;
                        while (true)
                        {
+                           //read client data request in the form of a command, then return data
                            String rawData = reader.ReadString();
                            CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
                            //execute the command.
