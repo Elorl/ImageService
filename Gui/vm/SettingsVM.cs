@@ -14,12 +14,22 @@ namespace Gui.settingsVM
 {
     class SettingsVM : ISettingsVM, INotifyPropertyChanged
     {
+        #region members
         private SettingsModel SettingsModel;
+        private string _SelectedItem;
+        #endregion
+
+        #region properties
         public ICommand RemoveCommand { get; private set; }
+        #endregion
+
         #region events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
-        private string _SelectedItem;
+        /// <summary>
+        /// constructor.
+        /// </summary>
+        /// <returns></returns>
         public SettingsVM()
         {
             this.SettingsModel = new SettingsModel();
@@ -70,13 +80,24 @@ namespace Gui.settingsVM
             }
         }
 
+        /// <summary>
+        /// NotifyPropertyChanged function.
+        /// notify if there is a change with the properties vlue.
+        /// </summary>
+        /// <param name="Name"></param>
         private void NotifyPropertyChanged(string Name)
         {
             PropertyChangedEventArgs propertyChangedEventArgs = new PropertyChangedEventArgs(Name);
             this.PropertyChanged?.Invoke(this, propertyChangedEventArgs);
         }
 
-        private void OnRemove(Object objct)
+        /// <summary>
+        /// OnRemove function.
+        /// get the selection from the user to delete
+        /// and send the command to the server.
+        /// </summary>
+        /// <param name="obj"></param>
+        private void OnRemove(Object obj)
         {
             try
             {
@@ -90,6 +111,11 @@ namespace Gui.settingsVM
             }
         }
 
+        /// <summary>
+        /// CanRemove function.
+        /// check if the remove can be done.
+        /// </summary>
+        /// <param name="obj"></param>
         private bool CanRemove(object obj)
         {
             if (this.SelectedItem == null || this.SelectedItem.Length == 0)
