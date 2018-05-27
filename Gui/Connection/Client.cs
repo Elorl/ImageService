@@ -19,7 +19,8 @@ namespace Gui.Connection
         #region members
         //single instance
         private static Client instance;
-        private bool isOn;
+        private bool isConnectionAttemptDone;
+        public bool isOn; 
         private TcpClient client;
         private NetworkStream stream;
         private BinaryReader reader;
@@ -45,7 +46,10 @@ namespace Gui.Connection
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         #endregion
 
-        private Client(){ this.isOn = false; }
+        private Client(){
+            this.isConnectionAttemptDone = false;
+            this.isOn = false;
+        }
 
         /// <summary>
         /// initializes members and connects to server
@@ -53,9 +57,9 @@ namespace Gui.Connection
         /// <param name="endPoint">end point to connect (server socket)</param>
         public bool Start()
         {
-            if(this.isOn) { return true; }
+            if(this.isConnectionAttemptDone) { return isOn; }
 
-            this.isOn = true;
+            this.isConnectionAttemptDone = true;
 
             try
             {
@@ -68,6 +72,7 @@ namespace Gui.Connection
                 writer = new BinaryWriter(stream);
             }
             catch (Exception e) { return false; }
+            this.isOn = true;
             string rawData;
             CommandRecievedEventArgs commandArgs;
             // ask for all logs by now

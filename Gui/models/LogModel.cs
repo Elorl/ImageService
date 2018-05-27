@@ -39,7 +39,7 @@ namespace Gui.models
             isSuccessfulConnect = this.client.Start();
             if (!isSuccessfulConnect)
             {
-                Application.Current.MainWindow.Background = new SolidColorBrush(Colors.DarkGray);
+                //Application.Current.MainWindow.Background = new SolidColorBrush(Colors.DarkGray);
             }
         }
 

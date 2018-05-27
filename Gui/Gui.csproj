@@ -64,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="Connection\Client.cs" />
     <Compile Include="models\LogModel.cs" />
+    <Compile Include="models\MainWindowModel.cs" />
     <Compile Include="models\SettingsModel.cs" />
     <Compile Include="views\Log.xaml.cs">
       <DependentUpon>Log.xaml</DependentUpon>
@@ -73,6 +74,7 @@
     </Compile>
     <Compile Include="vm\ISettingsVM.cs" />
     <Compile Include="vm\LogVM.cs" />
+    <Compile Include="vm\MainWindowVM.cs" />
     <Compile Include="vm\SettingsVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

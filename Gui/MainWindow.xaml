@@ -7,15 +7,28 @@
         xmlns:views="clr-namespace:Gui.views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Background>
+        <SolidColorBrush Color="{Binding Backgroundcolor}" />
+    </Window.Background>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    </Window.Resources>
     <Grid>
-        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <TabControl.Background>
+                <SolidColorBrush Color="{Binding Backgroundcolor}" />
+            </TabControl.Background>
             <TabItem Header="Settings">
-                <Grid Background="#FFE5E5E5">
+                <StackPanel Visibility="{Binding Path=IsConnected, Converter={StaticResource BoolToVisConverter} }">
+                <Grid Background="#FFE5E5E5" >
                     <views:Settings/>
                 </Grid>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Log">
+                <StackPanel Visibility="{Binding Path=IsConnected, Converter={StaticResource BoolToVisConverter} }">
                 <views:Log/>
+                </StackPanel>
             </TabItem>
         </TabControl>
 

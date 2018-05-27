@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gui.vm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace Gui
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainWindowVM();
         }
 
         private void Log_Loaded(object sender, RoutedEventArgs e)
