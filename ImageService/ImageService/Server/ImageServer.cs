@@ -35,6 +35,7 @@ namespace ImageService.Server
         public static Mutex ReadMutex { get; set; } = new Mutex();
         public static Mutex ClientsListMutex { get; set; } = new Mutex();
         #endregion
+
         /// <summary>
         /// constructor.
         /// </summary>
@@ -58,7 +59,6 @@ namespace ImageService.Server
             this.clientsList = new List<TcpClient>();
             LogCollectionSingleton.Instance.LogsCollection.CollectionChanged += ImageServer_LogCollectionChanged;
             folders = ConfigurationManager.AppSettings["Handler"].Split(';');
-            
             //creates handler for each given folder
             foreach(string folder in folders)
             {
@@ -75,8 +75,11 @@ namespace ImageService.Server
         }
 
         /// <summary>
-        /// Opens a new task listening to incoming clients, accepts them and passing them to handleClient func.
+        /// AcceptClients.
+        /// accept new clients that ask to connect to the server.
         /// </summary>
+        /// <param name="controller">controller</param>
+        /// <param name="logging"> logger</param>
         public void AcceptClients()
         {
             new Task(() => {
@@ -96,10 +99,12 @@ namespace ImageService.Server
 
             }).Start();
         }
+
         /// <summary>
-        /// handling a single client in a task.
+        /// HandleClient.
+        /// handle with a client(in different thread).
         /// </summary>
-        /// <param name="client">client to be handled</param>
+        /// <param name="client">TcpClient</param>
         private void HandleClient(TcpClient client)
         {
             new Task(() =>
@@ -116,8 +121,9 @@ namespace ImageService.Server
                            //read client data request in the form of a command, then return data
                            String rawData = reader.ReadString();
                            CommandRecievedEventArgs commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
-
+                           //execute the command.
                            result = m_controller.ExecuteCommand(commandArgs.CommandID, commandArgs.Args, out successFlag);
+                           //write the result to the client.
                            WriteMutex.WaitOne();
                            writer.Write(result);
                            WriteMutex.ReleaseMutex();
@@ -136,13 +142,14 @@ namespace ImageService.Server
                    }
                }).Start();
         }
+
         /// <summary>
-        /// activated when log of handlers event occurs. updates all clients in change.
+        /// NotifyChangeToAllClients.
+        /// notify all the clients about the command.
         /// </summary>
-        /// <param name="args">args containing changes</param>
+        /// <param name="args">CommandRecievedEventArgs</param>
         private void NotifyChangeToAllClients(CommandRecievedEventArgs args)
         {
-            
             foreach (TcpClient client in clientsList)
             {
                 new Task(()=> 
@@ -152,7 +159,7 @@ namespace ImageService.Server
                         NetworkStream stream = client.GetStream();
                         BinaryReader reader = new BinaryReader(stream);
                         BinaryWriter writer = new BinaryWriter(stream);
-
+                        //write the command to the clients.
                         WriteMutex.WaitOne();
                         writer.Write(JsonConvert.SerializeObject(args));
                         WriteMutex.ReleaseMutex();
@@ -172,6 +179,7 @@ namespace ImageService.Server
         }
 
         /// <summary>
+        /// createHandler.
         /// creates handler given a folder
         /// </summary>
         /// <param name="folder">folder to be handled</param>
@@ -184,8 +192,10 @@ namespace ImageService.Server
             handler.StartHandleDirectory(folder);
             this.m_logging.Log("start watch the directory: " + folder, MessageTypeEnum.INFO);
         }
+
         /// <summary>
-        /// closing the server and notifies components related to the service operation.
+        /// CloseServer.
+        /// close the server.
         /// </summary>
         public void CloseServer()
         {
@@ -197,6 +207,7 @@ namespace ImageService.Server
         }
 
         /// <summary>
+        /// removeHandler.
         /// remove handler from CommandRecieved event.
         /// </summary>
         /// <param name="source">source</param>
@@ -209,6 +220,7 @@ namespace ImageService.Server
             this.m_logging.Log("Handler closed", MessageTypeEnum.INFO);
         }
 
+
         public void ImageServer_LogCollectionChanged (object sender, NotifyCollectionChangedEventArgs e)
         {
             string[] commandArgs = new string[1];
@@ -216,18 +228,22 @@ namespace ImageService.Server
             CommandRecievedEventArgs args = new CommandRecievedEventArgs((int)CommandEnum.LogCommand, commandArgs, "");
             this.NotifyChangeToAllClients(args);
         }
+
         /// <summary>
-        /// reacting to a handler close request.
+        /// CloseHandler.
+        /// get a path to a directory and stop handle with it.
         /// </summary>
-        /// <param name="handlerPath">handler to be closed</param>
+        /// <param name="handlerPath"></param>
         public void CloseHandler(string handlerPath)
         {
+            //check if this handlerPath is in the handlers list.
             if (this.handlers.ContainsKey(handlerPath))
             {
                 IDirectoryHandler handler = handlers[handlerPath];
                 handler.EndHandle();
                 string[] args = new string[1];
                 args[0] = handlerPath;
+                //notify all the clients about the closed handler.
                 CommandRecievedEventArgs close = new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, args, "");
                 NotifyChangeToAllClients(close);
             }

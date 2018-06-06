@@ -18,6 +18,7 @@ namespace Gui.models
 {
     class SettingsModel : INotifyPropertyChanged
     {
+        #region members
         private string _OutputDir;
         private string _SourceName;
         private string _LogName;
@@ -25,12 +26,16 @@ namespace Gui.models
         public ObservableCollection<string> handlers;
         private Client client;
         private object SettingsCollectionLock;
+        #endregion
 
         #region events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
-
+        /// <summary>
+        /// constructor.
+        /// </summary>
+        /// <returns></returns>
         public SettingsModel()
         {
             this.handlers = new ObservableCollection<string>();
@@ -40,6 +45,7 @@ namespace Gui.models
             this.client.CommandRecieved += SettingsModel_CommandRecieved;
             bool returnVal ;
             returnVal = this.client.Start();
+            //check if there is an error while connecting to the server.
             if(!returnVal)
             {
                 Application.Current.MainWindow.Background = new SolidColorBrush(Colors.DarkGray);
@@ -49,14 +55,26 @@ namespace Gui.models
             this._OutputDir = string.Empty;
             this._LogName = string.Empty;
             this._ThumbnailSize = string.Empty;
+            //send the getConfig command to get the app.config info.
             CommandRecievedEventArgs initializeSettings = new CommandRecievedEventArgs((int)CommandEnum.GetConfigCommand, null, "");
             this.client.SendCommand(initializeSettings);
         }
+
+        /// <summary>
+        /// SendCommand function.
+        /// send the command to the client(to send to the server).
+        /// </summary>
+        /// <param name="command"></param>
         public void SendCommand(CommandRecievedEventArgs command)
         {
             this.client.SendCommand(command);
         }
 
+        /// <summary>
+        /// OnPropertyChanged function.
+        /// run the propertychange func if there is a change.
+        /// </summary>
+        /// <param name="name"></param>
         protected void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
@@ -100,6 +118,12 @@ namespace Gui.models
             get { return this._ThumbnailSize; }
         }
 
+        /// <summary>
+        /// SettingsModel_CommandRecieved function.
+        /// handle with arrived command from the server.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void SettingsModel_CommandRecieved(object sender, CommandRecievedEventArgs args)
         {
             if (args.CommandID == (int)CommandEnum.GetConfigCommand)
@@ -111,6 +135,12 @@ namespace Gui.models
                 CloseCommandHandle(args);
             }
         }
+
+        /// <summary>
+        /// GetConfigHandle function.
+        /// handle with a getConfig command.
+        /// </summary>
+        /// <param name="args"></param>
         private void GetConfigHandle(CommandRecievedEventArgs args)
         {
             this.OutputDir = args.Args[0];
@@ -118,12 +148,18 @@ namespace Gui.models
             this.LogName = args.Args[2];
             this.ThumbnailSize = args.Args[3];
             string[] incomeDirs = args.Args[4].Split(';');
+            //add all the folders to the list.
             foreach (string dir in incomeDirs)
             {
                 this.handlers.Add(dir);
             }
         }
 
+        /// <summary>
+        /// CloseCommandHandle function.
+        /// handle with a clsoe command.
+        /// </summary>
+        /// <param name="args"></param>
         private void CloseCommandHandle(CommandRecievedEventArgs args)
         {
             if (this.handlers.Contains(args.Args[0]))
