@@ -1,4 +1,4 @@
-﻿using Gui.Connection;
+﻿using Connection;
 using infrastructure;
 using infrastructure.Enums;
 using infrastructure.Events;

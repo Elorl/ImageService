@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Gui.Connection;
+using Connection;
 using infrastructure;
 using infrastructure.Enums;
 using infrastructure.Events;

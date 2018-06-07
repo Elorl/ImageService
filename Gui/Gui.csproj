@@ -62,7 +62,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Connection\Client.cs" />
     <Compile Include="models\LogModel.cs" />
     <Compile Include="models\MainWindowModel.cs" />
     <Compile Include="models\SettingsModel.cs" />
@@ -128,6 +127,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Connection\Connection.csproj">
+      <Project>{aba91268-722f-4eaa-a947-436807772898}</Project>
+      <Name>Connection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\infrastructure\infrastructure.csproj">
       <Project>{03fb0766-44bb-448f-bee3-87e31305f06b}</Project>
       <Name>infrastructure</Name>

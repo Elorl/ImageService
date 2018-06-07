@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using infrastructure.Events;
 using infrastructure.Enums;
 
-namespace Gui.Connection
+namespace Connection
 {
     /// <summary>
     /// this class is a --SINGLETON-- aims to connect to ImageService server.
@@ -20,7 +20,7 @@ namespace Gui.Connection
         //single instance
         private static Client instance;
         private bool isConnectionAttemptDone;
-        public bool isOn; 
+        public bool isOn;
         private TcpClient client;
         private NetworkStream stream;
         private BinaryReader reader;
@@ -48,7 +48,8 @@ namespace Gui.Connection
         /// <summary>
         /// constructor.
         /// </summary>
-        private Client(){
+        private Client()
+        {
             this.isConnectionAttemptDone = false;
             this.isOn = false;
         }
@@ -58,7 +59,7 @@ namespace Gui.Connection
         /// </summary>
         public bool Start()
         {
-            if(this.isConnectionAttemptDone) { return isOn; }
+            if (this.isConnectionAttemptDone) { return isOn; }
 
             this.isConnectionAttemptDone = true;
 
@@ -77,7 +78,7 @@ namespace Gui.Connection
             string rawData;
             CommandRecievedEventArgs commandArgs;
             new Task(() => {
-                while(true)
+                while (true)
                 {
                     try
                     {
@@ -86,7 +87,7 @@ namespace Gui.Connection
                         commandArgs = JsonConvert.DeserializeObject<CommandRecievedEventArgs>(rawData);
                         CommandRecieved?.Invoke(this, commandArgs);
                     }
-                    catch (Exception e){;}
+                    catch (Exception e) {; }
                 }
             }).Start();
             return true;
@@ -100,7 +101,8 @@ namespace Gui.Connection
             try
             {
                 writer.Write(JsonConvert.SerializeObject(args));
-            } catch(Exception e) {;}
+            }
+            catch (Exception e) {; }
         }
     }
 }
