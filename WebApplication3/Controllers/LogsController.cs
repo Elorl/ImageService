@@ -1,4 +1,6 @@
-﻿using infrastructure.Events;
+﻿using infrastructure;
+using infrastructure.Enums;
+using infrastructure.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,17 @@ namespace WebApplication3.Controllers
         public ActionResult Logs()
         {
             return View(logModel);
+        }
+        [HttpPost]
+        public ActionResult FilterLogs(string type)
+        {
+            List<LogItem> filteredLogsList = new List<LogItem>();
+            MessageTypeEnum enumType = (MessageTypeEnum) Enum.Parse(typeof(MessageTypeEnum), type);
+            foreach (LogItem log in logModel.LogsList)
+            {
+                if(log.Type == enumType) { filteredLogsList.Add(log); }
+            }
+            return View(filteredLogsList);
         }
     }
 }

@@ -1,16 +1,60 @@
-﻿@model WebApplication3.Models.LogsModel
+﻿@using infrastructure.Enums;
+@model WebApplication3.Models.LogsModel
 
 @{
 	ViewBag.Title = "Logs";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <h2>Logs</h2>
+<script>
+	$(document).ready(function () {
+		$("#filter").change(function () {
+			var value = $(this).val().toLowerCase();
+			$("#logTable tr").filter(function () {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	});
+</script>
+<script>
+	$(document).ready(function () {
+		$('.logTypeCls:contains("INFO")').css('background-color', '#66ff66');
+		$('.logTypeCls:contains("FAIL")').css('background-color', 'red');
+	});
+</script>
+<div>
 
-<table>
+	<div>
+		<br />
+		@Html.DropDownList("typeFilter",
+									 new SelectList(Enum.GetValues(typeof(MessageTypeEnum))), "Select", new { @id = "filter" })
+
+		<br />
+	</div>
+
+
+</div>
+<style>
+	table {
+		font-family: arial, sans-serif;
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	td, th {
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 8px;
+	}
+</style>
+
+<table id="logTable">
+	<th >Type</th>
+	<th >Message</th>
 	@foreach (var log in Model.LogsList)
 	{
 		<tr>
-			<td>
+			<td class="logTypeCls">
 				@Html.DisplayFor(modelItem => log.Type)
 			</td>
 			<td>
