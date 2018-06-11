@@ -35,18 +35,30 @@ namespace WebApplication3.Models
 
         [Required]
         [DataType(DataType.Text)]
+        [Display(Name = "ImageAbsPath")]
+        public string ImageAbsPath { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
         [Display(Name = "ThumbnailPath")]
         public string ThumbnailPath { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "ThumbnailAbsPath")]
+        public string ThumbnailAbsPath { get; set; }
         #endregion
 
         #region constructor
-        public Image(string name, string month, string year, string imageRelativePath, string thumbnailRelativePath)
+        public Image(string name, string month, string year, string imageRelativePath, string imageAbsPath,  string thumbnailRelativePath, string thumbnailAbsPath)
         {
             Name = name;
             Month = month;
             Year = year;
             ImagePath = imageRelativePath;
+            ImageAbsPath = imageAbsPath;
             ThumbnailPath = thumbnailRelativePath;
+            ThumbnailAbsPath = thumbnailAbsPath;
         }
         #endregion
 

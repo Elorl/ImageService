@@ -148,6 +148,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
@@ -156,7 +157,6 @@
     </Compile>
     <Compile Include="Models\ConfigModel.cs" />
     <Compile Include="Models\Image.cs" />
-    <Compile Include="Models\ImageAndThumbnailPair.cs" />
     <Compile Include="Models\ImagesModel.cs" />
     <Compile Include="Models\LogsModel.cs" />
     <Compile Include="Models\OutputPath.cs" />
@@ -201,10 +201,14 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Logs\Logs.cshtml" />
     <Content Include="Views\Images\Images.cshtml" />
-    <Content Include="Views\Image\Image.cshtml" />
+    <Content Include="Views\Images\DeleteImage.cshtml" />
+    <Content Include="Views\Images\Image.cshtml" />
+    <Content Include="Views\Config\Config.cshtml" />
+    <Content Include="Views\Config\toRemove.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\OutputImages\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="OutputImages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

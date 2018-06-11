@@ -40,8 +40,8 @@ namespace WebApplication3.Models
             if (toBeDeleted == null) { return;}
             try
             {
-                File.Delete(toBeDeleted.ThumbnailPath);
-                File.Delete(toBeDeleted.ImagePath);
+                File.Delete(toBeDeleted.ThumbnailAbsPath);
+                File.Delete(toBeDeleted.ImageAbsPath);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return;
@@ -73,9 +73,11 @@ namespace WebApplication3.Models
                         try
                         {
                             string name = thumb.Name;
-                            string thumbnailRelativePath = @"~\" + Path.GetFileName(ImagesDirPath.Path) + thumb.FullName.Replace(ImagesDirPath.Path, "");                     
+                            string thumbnailAbsPath = thumb.FullName;
+                            string thumbnailRelativePath = @"~\" + Path.GetFileName(ImagesDirPath.Path) + thumb.FullName.Replace(ImagesDirPath.Path, "");
+                            string imageAbsPath = thumbnailAbsPath.Replace("Thumbnails\\", "");
                             string imageRelativepath = thumbnailRelativePath.Replace("Thumbnails\\", "");
-                            Image image = new Image(name, monthDirectory.Name, yearDirectory.Name, imageRelativepath, thumbnailRelativePath);
+                            Image image = new Image(name, monthDirectory.Name, yearDirectory.Name, imageRelativepath, imageAbsPath,  thumbnailRelativePath, thumbnailAbsPath);
                             LoadedImages.Add(image);
                         }
                         catch (Exception){continue;}

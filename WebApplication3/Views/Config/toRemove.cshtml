@@ -1,0 +1,36 @@
+﻿@using infrastructure.Enums;
+@model WebApplication3.Models.ConfigModel
+@{
+	ViewBag.Title = "ToRemove ";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<div class="container">
+	<br>
+	<h3>Remove Handler</h3>
+	<br><br>
+	<div class="well well-lg">
+
+		<center>
+			<div class="alert alert-warning">
+				<strong>Do you want to Remove this handler from handlers list?</strong>
+			</div>
+			<button type="button" id="btnOK" class="btn btn-success" style="margin:20px">OK!</button>
+			<button type="button" id="btnCancel" class="btn btn-danger" style="margin:20px">Cancel</button>
+			<script>
+				$("#btnOK").click(function () {
+					 $.post("@Url.Action("ConfirmRemove")", function () {
+					   window.location.href = "Config";
+					});
+				 });
+
+				$("#btnCancel").click(function () {
+					 $.post("@Url.Action("NoDelete")", function () {
+					   window.location.href = "Config";
+					});
+				 });
+			</script>
+		</center>
+	</div>
+</div>
+
