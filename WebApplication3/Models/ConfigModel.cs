@@ -9,6 +9,7 @@ namespace WebApplication3.Models
 {
     public class ConfigModel
     {
+        /*
         public string OutputDir { get; set; }
 
         public event EventHandler<CommandRecievedEventArgs> SendInfo;
@@ -19,5 +20,6 @@ namespace WebApplication3.Models
         public void SendCommand(CommandEnum command, string item) { }
         public void Update(string s) { }
         public void GetInfomation(object sender, string s) { }
+        */
     }
 }
