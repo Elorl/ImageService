@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using infrastructure.Events;
 using System.Web;
 
 namespace WebApplication3.Models
@@ -13,21 +14,35 @@ namespace WebApplication3.Models
     /// 
     public class ImagesModel
     {
+        #region members
+        public OutputPath ImagesDirPath = OutputPath.Instance;
+        private static  ImagesModel instance;
+        #endregion
         #region properties
         [Display(Name = "Images")]
         public List<Image> Images { get; set; }
-        //singleton of the images path
-        public OutputPath ImagesDirPath = OutputPath.Instance;
         public int ImagesCount { get; set; } = 0;
+        public static ImagesModel Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ImagesModel();
+                }
+                return instance;
+            }
+        }
+
         #endregion
 
         #region events
-        public event EventHandler ImageCountChanged;
+        public event EventHandler<CommandRecievedEventArgs> ImageCountChanged;
         #endregion
 
         #region constructor
         /// loading images
-        public ImagesModel() { LoadImages(); }
+        private ImagesModel() { LoadImages(); }
         #endregion
         /// <summary>
         /// returns a requested image as image object.
@@ -65,6 +80,7 @@ namespace WebApplication3.Models
             //remove from list, update counter and raise counter event 
             Images.Remove(toBeDeleted);
             --ImagesCount;
+            ImagesDirPath.ImagesCounter = ImagesCount;
             ImageCountChanged?.Invoke(this, null);
         }
         /// <summary>
@@ -110,6 +126,7 @@ namespace WebApplication3.Models
             if(ImagesCount != newCount)
             {
                 ImagesCount = newCount;
+                ImagesDirPath.ImagesCounter = ImagesCount;
                 ImageCountChanged?.Invoke(this, null);
             }   
         }

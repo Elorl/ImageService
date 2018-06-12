@@ -13,6 +13,7 @@ namespace WebApplication3.Models
     {
         private static OutputPath instance;
         public string Path { set; get; }
+        public int ImagesCounter { set; get; } = 0;
 
         private OutputPath() { }
         public static OutputPath Instance
