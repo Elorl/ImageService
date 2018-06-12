@@ -44,7 +44,7 @@ namespace WebApplication3.Models
             foreach (LogItem item in newItems)
             {
                 this.LogsList.Add(item);
-                
+
             }
             LogRecievedEvent?.Invoke(this, null);
         }

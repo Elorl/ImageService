@@ -24,7 +24,7 @@ namespace WebApplication3.Models
         private string serviceStatus;
         private bool isOn;
         private static string outputDir;
-        private OutputPath outputPath = OutputPath.Instance;
+        public OutputPath outputPath = OutputPath.Instance;
         private static ConfigModel configModel;
         #endregion
 
@@ -70,52 +70,12 @@ namespace WebApplication3.Models
             {
                 outputDir = configModel.OutputDir;
                 Status = this.isOn;
-                NumPhotos = getNumPhotos();
+                NumPhotos = outputPath.ImagesCounter;
                 NotifyWeb?.Invoke();
             }
         }
 
-        /// <summary>
-        /// getNumPhotos function.
-        /// </summary>
-        private static int getNumPhotos()
-        {
-            //check if the path is valid.
-            if (outputDir == null || outputDir == "")
-            {
-                return 0;
-            } else
-            {
-                int numPhotos = 0;
-                try
-                {
-                    //get directory.
-                    DirectoryInfo dir = new DirectoryInfo(outputDir);
-                    //loop that runs all over the directories.
-                    foreach (DirectoryInfo directory in dir.GetDirectories())
-                    {
-                        if (directory.Name.Equals("Thumbnails"))
-                        {
-                            continue;
-                        }
-                        //in case of upper case or small case letters.
-                        numPhotos += directory.GetFiles("*jpg", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*JPG", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*gif", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*GIF", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*bmp", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*BMP", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*png", SearchOption.AllDirectories).Length;
-                        numPhotos += directory.GetFiles("*PNG", SearchOption.AllDirectories).Length;
-                    }
-                    return numPhotos / 2;
-                }
-                catch (Exception e)
-                {
-                    return 0;
-                }
-            }
-        }
+        
 
         /// <summary>
         /// GetStudentFromFile function.

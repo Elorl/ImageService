@@ -28,7 +28,7 @@
 	<div>
 		<br />
 		@Html.DropDownList("typeFilter",
-									 new SelectList(Enum.GetValues(typeof(MessageTypeEnum))), "Select", new { @id = "filter" })
+		new SelectList(Enum.GetValues(typeof(MessageTypeEnum))), "Select", new { @id = "filter" })
 
 		<br />
 	</div>
@@ -50,17 +50,17 @@
 </style>
 
 <table id="logTable">
-	<th >Type</th>
-	<th >Message</th>
+	<th>Type</th>
+	<th>Message</th>
 	@foreach (var log in Model.LogsList)
 	{
-		<tr>
-			<td class="logTypeCls">
-				@Html.DisplayFor(modelItem => log.Type)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => log.Message)
-			</td>
-		</tr>
+	<tr>
+		<td class="logTypeCls">
+			@Html.DisplayFor(modelItem => log.Type)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => log.Message)
+		</td>
+	</tr>
 	}
 </table>

@@ -19,7 +19,7 @@ namespace WebApplication3.Controllers
         {
             logModel.LogRecievedEvent -= LogController_LogRecieved;
             logModel.LogRecievedEvent += LogController_LogRecieved;
-           
+
         }
 
         public void LogController_LogRecieved(object sender, EventArgs args)
@@ -35,10 +35,10 @@ namespace WebApplication3.Controllers
         public ActionResult FilterLogs(string type)
         {
             List<LogItem> filteredLogsList = new List<LogItem>();
-            MessageTypeEnum enumType = (MessageTypeEnum) Enum.Parse(typeof(MessageTypeEnum), type);
+            MessageTypeEnum enumType = (MessageTypeEnum)Enum.Parse(typeof(MessageTypeEnum), type);
             foreach (LogItem log in logModel.LogsList)
             {
-                if(log.Type == enumType) { filteredLogsList.Add(log); }
+                if (log.Type == enumType) { filteredLogsList.Add(log); }
             }
             return View(filteredLogsList);
         }

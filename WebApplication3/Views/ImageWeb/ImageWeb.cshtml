@@ -17,7 +17,8 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">Number of photos:</div>
 		<div class="panel-body">
-			@ViewBag.NumPhotos
+
+			@Html.DisplayFor(model => model.outputPath.ImagesCounter)
 		</div>
 	</div>
 	<table class="table table-condensed">

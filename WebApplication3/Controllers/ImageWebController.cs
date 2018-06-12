@@ -14,6 +14,7 @@ namespace WebApplication3.Controllers
     {
         #region members
         static ImageWebModel ImageWebModel = new ImageWebModel();
+        public static ImagesModel imagesModel = ImagesModel.Instance;
         #endregion
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace WebApplication3.Controllers
         /// </summary>
         public void Notify()
         {
+            imagesModel.LoadImages();
             ImageWeb();
         }
 
@@ -39,8 +41,7 @@ namespace WebApplication3.Controllers
         /// </summary>
         public ActionResult ImageWeb()
         {
-            //transfer the number of photos and server's status.
-            ViewBag.NumPhotos = ImageWebModel.NumPhotos;
+            //transfer server's status.
             ViewBag.Status = ImageWebModel.Status;
             return View(ImageWebModel);
         }
