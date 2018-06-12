@@ -3,35 +3,24 @@
 @{
 	ViewBag.Title = "Images";
 }
-<h2>Images</h2>
+<h2>Photos</h2>
 
-<div>
-	@{
-		if (Model.Images == null)
-		{
-			<p>list is null</p>
-			<p>@Model.ImagesCount</p>
-			<p>@Model.ImagesDirPath.Path</p>
-			return;
-		}
+<div
+	@foreach (var image in Model.Images)
+	{
+		<div class="col-xs-18 col-sm-6 col-md-3">
 
+			<img src="@Url.Content(image.ThumbnailPath)" alt="@image.Name" class="img-circle">
+			<div class="caption">
 
-		foreach (var image in Model.Images)
-		{
-			<div class="col-xs-18 col-sm-6 col-md-3">
+				<h5>@image.Name</h5>
 
-				<img src="@Url.Content(image.ThumbnailPath)" alt="@image.Name" class="img-circle">
-				<div class="caption">
+				<p>Date: @image.Month / @image.Year</p>
 
-					<h5>@image.Name</h5>
+				<p> <a href="@Url.Action("Image", new { imagePath = image.ThumbnailPath})" id="btnView" role="button" class="btn btn-info btn-xs">View</a> <a href="@Url.Action("DeleteImage", new { imagePath  = image.ThumbnailPath})" id="btnDelete" role="button" class="btn btn-danger btn-xs">Delete</a> </p>
 
-					<p>Date: @image.Month / @image.Year</p>
-
-					<p> <a href="@Url.Action("Image", new { imagePath = image.ThumbnailPath})" id="btnView" role="button" class="btn btn-info btn-xs">View</a> <a href="@Url.Action("DeleteImage", new { imagePath  = image.ThumbnailPath})" id="btnDelete" role="button" class="btn btn-danger btn-xs">Delete</a> </p>
-
-				</div>
 			</div>
-		}
+		</div>
 	}
 	</div>
 		<br />
