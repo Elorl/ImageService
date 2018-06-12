@@ -7,11 +7,16 @@ using System.Web;
 
 namespace WebApplication3.Models
 {
+    /// <summary>
+    /// Model of images gallery.
+    /// </summary>
+    /// 
     public class ImagesModel
     {
         #region properties
         [Display(Name = "Images")]
         public List<Image> Images { get; set; }
+        //singleton of the images path
         public OutputPath ImagesDirPath = OutputPath.Instance;
         public int ImagesCount { get; set; } = 0;
         #endregion
@@ -20,8 +25,15 @@ namespace WebApplication3.Models
         public event EventHandler ImageCountChanged;
         #endregion
 
+        #region constructor
+        /// loading images
         public ImagesModel() { LoadImages(); }
-
+        #endregion
+        /// <summary>
+        /// returns a requested image as image object.
+        /// </summary>
+        /// <param name="thumbnailPath">path of image's thumbnail</param>
+        /// <returns>requested image</returns>
         public Image GetImage(string thumbnailPath)
         {
             foreach(Image image in Images)
@@ -33,11 +45,15 @@ namespace WebApplication3.Models
             }
             return null;
         }
-
+        /// <summary>
+        /// deletes an image.
+        /// </summary>
+        /// <param name="toBeDeletedPath">path of thumbnail of the image to be deleted</param>
         public void DeleteImage(string toBeDeletedPath)
         {
             Image toBeDeleted = GetImage(toBeDeletedPath);
             if (toBeDeleted == null) { return;}
+            //try actual files deletion
             try
             {
                 File.Delete(toBeDeleted.ThumbnailAbsPath);
@@ -46,11 +62,14 @@ namespace WebApplication3.Models
                 Console.WriteLine(e.Message);
                 return;
             }
+            //remove from list, update counter and raise counter event 
             Images.Remove(toBeDeleted);
             --ImagesCount;
             ImageCountChanged?.Invoke(this, null);
         }
-
+        /// <summary>
+        /// load images list from images path.
+        /// </summary>
         public void LoadImages()
         {
             string[] extensions = { ".jpg", ".png", ".gif", ".bmp" };
@@ -72,6 +91,7 @@ namespace WebApplication3.Models
 
                         try
                         {
+                            ///create the image object and add to list
                             string name = thumb.Name;
                             string thumbnailAbsPath = thumb.FullName;
                             string thumbnailRelativePath = @"~\" + Path.GetFileName(ImagesDirPath.Path) + thumb.FullName.Replace(ImagesDirPath.Path, "");
@@ -84,7 +104,7 @@ namespace WebApplication3.Models
                     }
                 }
             }
-            //update member list, count and invoke count event if needed
+            //update member(!) images list, count and invoke count event if needed
             Images = LoadedImages;
             int newCount = Images.Count();
             if(ImagesCount != newCount)

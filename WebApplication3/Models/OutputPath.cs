@@ -5,6 +5,10 @@ using System.Web;
 
 namespace WebApplication3.Models
 {
+    /// <summary>
+    /// a SINGLETON contains images directory path. 
+    /// Aimes to support updates\getting of images path, without illegal referencing of the config controller or model.
+    /// </summary>
     public class OutputPath
     {
         private static OutputPath instance;

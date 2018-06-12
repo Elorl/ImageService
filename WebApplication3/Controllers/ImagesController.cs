@@ -8,6 +8,9 @@ using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
+    /// <summary>
+    /// controller of the images gallery
+    /// </summary>
     public class ImagesController : Controller
     {
         #region members
@@ -19,11 +22,21 @@ namespace WebApplication3.Controllers
             imagesModel.LoadImages();
             return View(imagesModel);
         }
+
+        /// <summary>
+        /// view a single image
+        /// </summary>
+        /// <param name="imagePath">path of image to be viewed</param>
+        /// <returns>view contains image</returns>
         public ActionResult Image(string imagePath)
         {
             return View(imagesModel.GetImage(imagePath));
         }
-
+        /// <summary>
+        /// delete an image by path
+        /// </summary>
+        /// <param name="imagePath">path of image to be deleted</param>
+        /// <returns>view</returns>
         public ActionResult DeleteImage(string imagePath)
         {
             ViewBag.waitingForDeletion = imagePath;
@@ -31,6 +44,11 @@ namespace WebApplication3.Controllers
             return View(imagesModel);
         }
 
+        /// <summary>
+        /// return the view of image deletion confirmation.
+        /// </summary>
+        /// <param name="ImagePath">path of image to confirm deletion</param>
+        /// <returns>view</returns>
         public ActionResult ConfirmDelete(string ImagePath)
         {
             //delete

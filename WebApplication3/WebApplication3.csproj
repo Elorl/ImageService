@@ -209,8 +209,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ImagesOutput\" />
-    <Folder Include="Views\ConfigModel\" />
-    <Folder Include="Views\ImageWebModel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

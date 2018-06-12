@@ -6,6 +6,9 @@ using System.Web;
 
 namespace WebApplication3.Models
 {
+    /// <summary>
+    /// A single Image object. used in gallery and also as a model of a the view of single image.
+    /// </summary>
     public class Image
     {
         #region Properties
