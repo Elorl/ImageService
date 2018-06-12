@@ -19,6 +19,7 @@ namespace WebApplication3.Models
         private string serviceStatus;
         private bool isOn;
         private static string outputDir;
+        private OutputPath outputPath = OutputPath.Instance;
         private static ConfigModel configModel;
         public event Notifychanges NotifyWeb;
 
@@ -36,6 +37,7 @@ namespace WebApplication3.Models
             if (configModel.OutputDir != null || configModel.OutputDir != "")
             {
                 outputDir = configModel.OutputDir;
+
                 NumPhotos = getNumPhotos();
                 NotifyWeb?.Invoke();
             }

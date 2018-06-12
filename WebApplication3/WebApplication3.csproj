@@ -150,14 +150,18 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\ImageWebController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigModel.cs" />
+    <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\ImagesModel.cs" />
     <Compile Include="Models\ImageWebModel.cs" />
     <Compile Include="Models\LogsModel.cs" />
+    <Compile Include="Models\OutputPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +202,13 @@
     <Content Include="Views\Config\Config.cshtml" />
     <Content Include="Views\Config\ToRemove.cshtml" />
     <Content Include="Views\ImageWeb\ImageWeb.cshtml" />
+    <Content Include="Views\Images\DeleteImage.cshtml" />
+    <Content Include="Views\Images\Image.cshtml" />
+    <Content Include="Views\Images\Images.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ImagesOutput\" />
     <Folder Include="Views\ConfigModel\" />
     <Folder Include="Views\ImageWebModel\" />
   </ItemGroup>
@@ -221,6 +229,10 @@
     <ProjectReference Include="..\Connection\Connection.csproj">
       <Project>{aba91268-722f-4eaa-a947-436807772898}</Project>
       <Name>Connection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageService\ImageService.csproj">
+      <Project>{3ba2801c-d344-4983-b2b4-df19e762c372}</Project>
+      <Name>ImageService</Name>
     </ProjectReference>
     <ProjectReference Include="..\infrastructure\infrastructure.csproj">
       <Project>{03fb0766-44bb-448f-bee3-87e31305f06b}</Project>

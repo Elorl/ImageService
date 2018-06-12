@@ -23,6 +23,7 @@ namespace WebApplication3.Models
             this.client.CommandRecieved += ConfigRecieved;
             this.client.Start();
             this.OutputDir = String.Empty;
+            this.OutputPath = OutputPath.Instance;
             this.SourceName = String.Empty;
             this.LogName = String.Empty;
             this.ThumbnailSize = String.Empty;
@@ -61,6 +62,7 @@ namespace WebApplication3.Models
         private void GetConfigHandle(CommandRecievedEventArgs args)
         {
             this.OutputDir = args.Args[0];
+            this.OutputPath.Path = args.Args[0];
             this.SourceName = args.Args[1];
             this.LogName = args.Args[2];
             this.ThumbnailSize = args.Args[3];
@@ -84,6 +86,11 @@ namespace WebApplication3.Models
         [Required]
         [Display(Name = "Output Directory")]
         public string OutputDir { get; set; }
+
+        [Required]
+        [Display(Name = "OutputPath")]
+        public OutputPath OutputPath { get; set; }
+
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Source Name")]

@@ -8,7 +8,7 @@ namespace WebApplication3.Models
     public class OutputPath
     {
         private static OutputPath instance;
-        public string Path { set; get; } = "C:\\Users\\avn\\source\\repos\\ImageService\\WebApplication3\\OutputImages";
+        public string Path { set; get; }
 
         private OutputPath() { }
         public static OutputPath Instance
