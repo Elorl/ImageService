@@ -14,7 +14,7 @@ namespace WebApplication3.Controllers
     public class ImagesController : Controller
     {
         #region members
-        public static ImagesModel imagesModel = new ImagesModel();
+        public static ImagesModel imagesModel = ImagesModel.Instance;
         #endregion
         // GET: Images
         public ActionResult Images()
