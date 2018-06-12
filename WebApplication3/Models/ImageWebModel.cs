@@ -13,16 +13,43 @@ using static WebApplication3.Models.ConfigModel;
 
 namespace WebApplication3.Models
 {
+    /// <summary>
+    /// Model of ImageWeb page.
+    /// </summary>
+    /// 
     public class ImageWebModel
     {
+        #region members
         Client client;
         private string serviceStatus;
         private bool isOn;
         private static string outputDir;
         private OutputPath outputPath = OutputPath.Instance;
         private static ConfigModel configModel;
-        public event Notifychanges NotifyWeb;
+        #endregion
 
+        #region events
+        public event Notifychanges NotifyWeb;
+        #endregion
+
+        #region properties
+        [Required]
+        [Display(Name = "Service Status")]
+        public bool Status { get; set; }
+
+        [Required]
+        [Display(Name = "Number of photos")]
+        public int NumPhotos { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Students")]
+        public List<Student> Students { get; set; }
+        #endregion
+
+        /// <summary>
+        /// constructor.
+        /// </summary>
         public ImageWebModel()
         {
             this.client = Client.Instance;
@@ -33,8 +60,12 @@ namespace WebApplication3.Models
             Students = GetStudentFromFile();
         }
 
+        /// <summary>
+        /// Notify function.
+        /// </summary>
         public void Notify()
         {
+            //check if the path is valid.
             if (configModel.OutputDir != null || configModel.OutputDir != "")
             {
                 outputDir = configModel.OutputDir;
@@ -44,8 +75,12 @@ namespace WebApplication3.Models
             }
         }
 
+        /// <summary>
+        /// getNumPhotos function.
+        /// </summary>
         private static int getNumPhotos()
         {
+            //check if the path is valid.
             if (outputDir == null || outputDir == "")
             {
                 return 0;
@@ -54,10 +89,12 @@ namespace WebApplication3.Models
                 int numPhotos = 0;
                 try
                 {
+                    //get directory.
                     DirectoryInfo dir = new DirectoryInfo(outputDir);
+                    //loop that runs all over the directories.
                     foreach (DirectoryInfo directory in dir.GetDirectories())
                     {
-                        if(directory.Name.Equals("Thumbnails"))
+                        if (directory.Name.Equals("Thumbnails"))
                         {
                             continue;
                         }
@@ -72,49 +109,53 @@ namespace WebApplication3.Models
                         numPhotos += directory.GetFiles("*PNG", SearchOption.AllDirectories).Length;
                     }
                     return numPhotos / 2;
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     return 0;
                 }
             }
         }
 
+        /// <summary>
+        /// GetStudentFromFile function.
+        /// </summary>
         public static List<Student> GetStudentFromFile()
         {
+            //open a stream to a file.
             StreamReader studentsFile = new StreamReader(System.Web.HttpContext.Current.Server.MapPath("~/App_Data/students.txt"));
             string readline;
             string[] arr;
             List<Student> Students = new List<Student>();
+            //loop that read every line inside the file.
             while ((readline = studentsFile.ReadLine()) != null)
             {
                 arr = readline.Split(',');
+                //add the student name and id to the list of students.
                 Students.Add(new Student(arr[0], arr[1]));
             }
             studentsFile.Close();
             return Students;
         }
-        [Required]
-        [Display(Name = "Service Status")]
-        public bool Status { get; set; }
 
-        [Required]
-        [Display(Name = "Number of photos")]
-        public int NumPhotos { get; set; }
-
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Students")]
-        public List<Student> Students { get; set; }
-
+        /// <summary>
+        /// Student.
+        /// </summary>
         public class Student
         {
+            #region members
             private string name, id;
+            #endregion
 
+            /// <summary>
+            /// constructor.
+            /// </summary>
             public Student(string name, string id)
             {
                 this.name = name;
                 this.id = id;
             }
+            #region properties
             public string GetName
             {
                 get { return this.name; }
@@ -123,6 +164,7 @@ namespace WebApplication3.Models
             {
                 get { return this.id; }
             }
+            #endregion
         }
     }
 }
