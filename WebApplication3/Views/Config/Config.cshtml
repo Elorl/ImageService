@@ -1,0 +1,65 @@
+﻿@using infrastructure.Enums;
+@model WebApplication3.Models.ConfigModel
+@{
+	ViewBag.Title = "Config";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<div class="container">
+	<h2>Config</h2>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Criteria</th>
+				<th>Detail</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					@Html.LabelFor(m => m.OutputDir)
+				</td>
+				<td>
+					@Html.DisplayFor(m => m.OutputDir)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(m => m.SourceName)
+				</td>
+				<td>
+					@Html.DisplayFor(m => m.SourceName)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(m => m.LogName)
+				</td>
+				<td>
+					@Html.DisplayFor(m => m.LogName)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(m => m.ThumbnailSize)
+				</td>
+				<td>
+					@Html.DisplayFor(m => m.ThumbnailSize)
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<kbd>
+		Handlers:
+	</kbd>
+	<table class="table">
+		<tbody>
+			@foreach (var handler in Model.Handlers)
+			{
+			<tr>
+				<td>
+					@Html.ActionLink(@handler, "RemoveHandler", new {  selectedItem = handler })
+				</td>
+			</tr>
+			}
+	</table>
+</div>

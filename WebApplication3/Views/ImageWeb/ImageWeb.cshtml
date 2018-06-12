@@ -1,0 +1,45 @@
+﻿@using infrastructure.Enums;
+@model WebApplication3.Models.ImageWebModel
+@{
+	ViewBag.Title = "ImageWeb";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<h2>ImageWeb</h2>
+<div class="container">
+	<div class="panel panel-info">
+		<div class="panel-heading">Server status:</div>
+		<div class="panel-body">
+			@ViewBag.Status
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Number of photos:</div>
+		<div class="panel-body">
+			@ViewBag.NumPhotos
+		</div>
+	</div>
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>ID</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var student in Model.Students)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(model => student.GetName)
+					</td>
+					<td>
+						@Html.DisplayFor(model => student.GetID)
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
