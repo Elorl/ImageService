@@ -5,9 +5,16 @@
 }
 <h2>Photos</h2>
 
-<div
-	@foreach (var image in Model.Images)
-	{
+<div>
+	@{
+		if (@Model.Images == null)
+		{
+			<p>No Images to show.</p>
+			return;
+		}
+
+		foreach (var image in Model.Images)
+		{
 		<div class="col-xs-18 col-sm-6 col-md-3">
 
 			<img src="@Url.Content(image.ThumbnailPath)" alt="@image.Name" class="img-circle">
@@ -22,5 +29,6 @@
 			</div>
 		</div>
 	}
-	</div>
+	}
+</div>
 		<br />
