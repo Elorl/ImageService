@@ -26,6 +26,7 @@ namespace WebApplication3.Models
         public ImageWebModel()
         {
             this.client = Client.Instance;
+            client.Start();
             this.isOn = client.isOn;
             configModel = new ConfigModel();
             configModel.Notify += Notify;
@@ -37,7 +38,7 @@ namespace WebApplication3.Models
             if (configModel.OutputDir != null || configModel.OutputDir != "")
             {
                 outputDir = configModel.OutputDir;
-
+                Status = this.isOn;
                 NumPhotos = getNumPhotos();
                 NotifyWeb?.Invoke();
             }
