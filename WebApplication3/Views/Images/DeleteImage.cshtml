@@ -1,0 +1,14 @@
+﻿@model WebApplication3.Models.ImagesModel
+
+@{
+	ViewBag.Title = "DeleteImage";
+}
+
+<h2>Delete @ViewBag.ToBeDletedName ?</h2>
+<img src="@Url.Content(ViewBag.waitingForDeletion)">
+<br />
+<br />
+
+<p><a href="@Url.Action("ConfirmDelete", new {ImagePath = ViewBag.waitingForDeletion })" role="button" class="btn btn-danger btn-xs">Confirm</a>     <a href="@Url.Action("Images")" role="button" class="btn btn-info btn-xs" >Cancel</a> </p>
+
+
