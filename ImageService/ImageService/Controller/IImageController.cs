@@ -9,7 +9,7 @@ namespace ImageService.Controller
 {
     public interface IImageController
     {
-        ImageServer ImageServer { set; }
+        ImageServer ImageServer { set; get; }
         string ExecuteCommand(int commandID, string[] args, out bool result);          // Executing the Command Requet
     }
 }

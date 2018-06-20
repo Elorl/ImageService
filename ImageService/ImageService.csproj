@@ -59,7 +59,9 @@
     <Compile Include="ImageService\Commands\ICommand.cs" />
     <Compile Include="ImageService\Commands\LogCommand.cs" />
     <Compile Include="ImageService\Commands\NewFileCommand.cs" />
+    <Compile Include="ImageService\Controller\Handlers\AppClientHandler.cs" />
     <Compile Include="ImageService\Controller\Handlers\DirectoyHandler.cs" />
+    <Compile Include="ImageService\Controller\Handlers\IAppClientHandler.cs" />
     <Compile Include="ImageService\Controller\Handlers\IDirectoryHandler.cs" />
     <Compile Include="ImageService\Controller\IImageController.cs" />
     <Compile Include="ImageService\Controller\ImageController.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="ImageService\ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageService\Server\AppServer.cs" />
     <Compile Include="Logging\ILoggingService.cs" />
     <Compile Include="Logging\LogCollectionSingleton.cs" />
     <Compile Include="Logging\LoggingService.cs" />

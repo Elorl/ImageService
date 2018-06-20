@@ -111,6 +111,10 @@ namespace ImageService.Controller.Handlers
                 this.m_logging.Log(massage, MessageTypeEnum.FAIL);
             }
         }
+        public string GetPath()
+        {
+            return this.m_path;
+        }
     }
 }
 

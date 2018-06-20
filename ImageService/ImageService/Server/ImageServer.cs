@@ -26,7 +26,8 @@ namespace ImageService.Server
         private ILoggingService m_logging;
         private TcpListener tcpListener;
         private List<TcpClient> clientsList;
-        private Dictionary<string, IDirectoryHandler> handlers;
+        public Dictionary<string, IDirectoryHandler> handlers;
+        public string[] folders { get; set; }
         #endregion
 
         #region Properties
@@ -43,7 +44,6 @@ namespace ImageService.Server
         /// <param name="logging"> logger</param>
         public ImageServer(IImageController controller, ILoggingService logging)
         {
-            string[] folders;
             try {
                 this.m_controller = controller;
                 this.m_logging = logging;

@@ -36,6 +36,10 @@ namespace ImageService.Controller
 
         public ImageServer ImageServer
         {
+            get
+            {
+                return m_imageServer;
+            }
             set
             {
                 this.m_imageServer = value;

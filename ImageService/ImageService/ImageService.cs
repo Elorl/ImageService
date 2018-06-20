@@ -16,6 +16,7 @@ using ImageService.Logging.Modal;
 using System.Configuration;
 using infrastructure.Enums;
 using infrastructure;
+using ImageService.Controller.Handlers;
 
 
 namespace ImageService
@@ -54,7 +55,8 @@ namespace ImageService
         private IImageController controller;
         private ImageServer m_imageServer;          // The Image Server
         private Logging.ILoggingService logger;
-        private LogCollectionSingleton logCollectionSingleton; 
+        private LogCollectionSingleton logCollectionSingleton;
+        private IAppClientHandler AppClientHandler;
 
         public ImageService(string[] args)
         {
@@ -73,7 +75,6 @@ namespace ImageService
             this.logger = new LoggingService();
             //register this messageRecived function to the MessageRecieved event in the logger
             this.logger.MessageRecieved += MessageRecievedOperation;
-
             this.model = new ImageServiceModal()
             {
                 OutputFolder = ConfigurationManager.AppSettings.Get("OutputDir"),
@@ -82,6 +83,7 @@ namespace ImageService
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
             this.controller.ImageServer = this.m_imageServer;
+            this.AppClientHandler = new AppClientHandler(this.controller, this.logger);
         }
         /// <summary>
         /// beeing activated in service start
