@@ -70,6 +70,7 @@ namespace ImageService.Server
                         TcpClient client = this.tcpListener.AcceptTcpClient();
                         clientsList.Add(client);
                         IAppClientHandler clientHandler = new AppClientHandler(m_controller, m_logging);
+                        this.m_logging.Log("App-client joined to the server.", MessageTypeEnum.INFO);
                         clientHandler.HandleClient(client);
                     }
                     catch (Exception e)

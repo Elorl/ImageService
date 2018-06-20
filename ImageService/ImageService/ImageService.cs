@@ -56,7 +56,7 @@ namespace ImageService
         private ImageServer m_imageServer;          // The Image Server
         private Logging.ILoggingService logger;
         private LogCollectionSingleton logCollectionSingleton;
-        private IAppClientHandler AppClientHandler;
+        private AppServer m_appServer;
 
         public ImageService(string[] args)
         {
@@ -83,7 +83,7 @@ namespace ImageService
             this.controller = new ImageController(this.model);
             this.m_imageServer = new ImageServer(this.controller, this.logger);
             this.controller.ImageServer = this.m_imageServer;
-            this.AppClientHandler = new AppClientHandler(this.controller, this.logger);
+            this.m_appServer = new AppServer(this.controller, this.logger);
         }
         /// <summary>
         /// beeing activated in service start
