@@ -40,6 +40,10 @@ namespace ImageService.Controller.Handlers
 
         }
 
+        /// <summary>
+        /// HandleClient.
+        /// </summary>
+        /// <param name="client">TcpClient</param>
         public void HandleClient(TcpClient client)
         {
             new Task(() =>
@@ -49,18 +53,21 @@ namespace ImageService.Controller.Handlers
                     try
                     {
                         m_logging.Log("start handle with app-client", MessageTypeEnum.INFO);
+                        //get the stream
                         stream = client.GetStream();
                         string fileName = GetImageName(stream);
                         Byte[] success = new byte[1] { 1 };
+                        //check if the client done with sending images.
                         if (fileName.Equals("DONE"))
                         {
                             m_logging.Log("All app-client images have been transfered.", MessageTypeEnum.INFO);
-                            stream.Write(success, 0, 1);
                             break;
                         }
                         stream.Write(success, 0, 1);
+                        //get the image.
                         Byte[] image = GetImage(stream);
                         stream.Write(success, 0, 1);
+                        //get the first dir the service listen to.
                         string dir = m_controller.ImageServer.folders[0];
                         File.WriteAllBytes(Path.Combine(dir, fileName), image);
                         m_logging.Log("Photo transfered", MessageTypeEnum.INFO);
@@ -71,11 +78,16 @@ namespace ImageService.Controller.Handlers
                     }
 
                 }
+                //close the stream and client.
                 stream.Close();
                 client.Close();
             }).Start();
         }
 
+        /// <summary>
+        /// GetImageName.
+        /// </summary>
+        /// <param name="stream">NetworkStream stream</param>
         private string GetImageName(NetworkStream stream)
         {
             Byte[] currentRead = new byte[1];
@@ -85,9 +97,14 @@ namespace ImageService.Controller.Handlers
                 stream.Read(currentRead, 0, 1);
                 input.Add(currentRead[0]);
             } while (stream.DataAvailable);
+            //convert the input to string.
             return Encoding.ASCII.GetString(input.ToArray(), 0, input.ToArray().Length);
         }
 
+        /// <summary>
+        /// GetSize.
+        /// </summary>
+        /// <param name="stream">NetworkStream stream</param>
         private int GetSize(NetworkStream stream)
         {
             Byte[] currentRead = new byte[1];
@@ -97,23 +114,29 @@ namespace ImageService.Controller.Handlers
                 stream.Read(currentRead, 0, 1);
                 input.Add(currentRead[0]);
             } while (stream.DataAvailable);
+            //convert the bytes to string.
             string sizeString = Encoding.ASCII.GetString(input.ToArray(), 0, input.ToArray().Length);
             int size;
+            //convert the string to int.
             int.TryParse(sizeString, out size);
             Byte[] success = new byte[1] { 1 };
             stream.Write(success, 0, 1);
             return size;
         }
+
+        /// <summary>
+        /// GetImage.
+        /// </summary>
+        /// <param name="stream">NetworkStream stream</param>
         private Byte[] GetImage(NetworkStream stream)
         {
             int size = GetSize(stream);
             Byte[] read = new byte[size];
-            int bytesRead = stream.Read(read, 0, size);
-            int bytes = size - bytesRead;
-            while(bytes > 0)
+            int bytesReadSum = stream.Read(read, 0, size);
+            //get the bytes of the image.
+            while (size > bytesReadSum)
             {
-                bytesRead = stream.Read(read, 0, bytes);
-                bytes = bytes - bytesRead;
+                bytesReadSum += stream.Read(read, bytesReadSum, size - bytesReadSum);
             }
             return read;
         }
